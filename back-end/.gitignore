@@ -149,3 +149,6 @@ notebook/templates/*.html
 
 # Temporary files used for testing
 tmp/
+
+back-end/data/elliptic/elliptic_txs_*.csv
+back-end/*/elliptic_txs_*.csv
