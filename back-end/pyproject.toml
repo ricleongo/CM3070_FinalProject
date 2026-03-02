@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+# Adding "." ensures pytest can see "src" as a package
+pythonpath = ["."]
+# Recommended for modern pytest to avoid import collisions
+addopts = ["--import-mode=importlib"]

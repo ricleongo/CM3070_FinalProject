@@ -1,3 +1,33 @@
+# Angular specific
+/dist/
+/out-tsc/
+/tmp/
+/coverage/
+/e2e/test-output/
+/.angular/
+.angular/
+
+# Node modules and dependency files
+/node_modules/
+/package-lock.json
+/yarn.lock
+
+# Environment files
+/.env
+
+# Angular CLI and build artefacts
+/.angular-cli.json
+/.ng/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
 # Jupyter Notebook specific
 *.bundle.*
 lib/
@@ -151,6 +181,4 @@ notebook/templates/*.html
 tmp/
 
 # Excluding Elliptic Data Files
-back_end/data/elliptic/elliptic_txs_classes.csv
-back_end/data/elliptic/elliptic_txs_edgelist.csv
-back_end/data/elliptic/elliptic_txs_features.csv
+back-end/data/elliptic/elliptic_txs_*.csv
