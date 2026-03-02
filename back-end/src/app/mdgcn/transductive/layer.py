@@ -27,10 +27,10 @@ class TransductiveLayer(layers.Layer):
         self.dropout = layers.Dropout(self.dropout_rate)
 
 
-    def call(self, node_features, adjacent_dist_list, training=False):
+    def call(self, node_features, adjacent_list, training=False):
         """ Keras Layer Forward Propagation Learning Process
         node_features: [features_length, fan_input]
-        adjacent_dist_list: list of SparseTensor adj matrices
+        adjacent_list: list of SparseTensor adj matrices
         """
 
         output = 0.0
@@ -45,7 +45,7 @@ class TransductiveLayer(layers.Layer):
 
             # 3 Sparse spatial propagation
             spatial_part = self._sparse_propagation(
-                adjacent_dist_list[hop],
+                adjacent_list[hop],
                 features_by_hop
             )
 

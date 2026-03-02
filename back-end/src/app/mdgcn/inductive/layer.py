@@ -51,24 +51,29 @@ class InductiveLayer(layers.Layer):
             for _ in range(self.K + 1)
         ]
 
-    def _get_output(self, node_features, adjacent_dist_list):
+    def _get_output(self, node_features, adjacent_list):
         """
         node_features: node features [N, F]
-        adjacent_dist_list: list of adjacency matrices [N, N] (can be sparse)
+        adjacent_list: list of adjacency matrices [N, N] (can be sparse)
         """
 
         learned_embeddings = self.embedding_layer(node_features)
-
         output = 0.0
+
         for hop in range(self.K + 1):
-            adjacent_hop = adjacent_dist_list[hop]  # can be sparse tensor
-            A_hat = adjacent_hop + self.alpha * tf.matmul(learned_embeddings, learned_embeddings, transpose_b=True)
 
-            # Symmetric normalization
-            deg = tf.reduce_sum(A_hat, axis=1)
-            deg_inv_sqrt = tf.linalg.diag(tf.pow(deg, -0.5))
-            A_norm = tf.matmul(tf.matmul(deg_inv_sqrt, A_hat), deg_inv_sqrt)
+            adjacent_sparse = adjacent_list[hop]
 
-            output += tf.matmul(A_norm, self.kernels[hop](node_features))
+            feature_weights = self.kernels[hop](node_features)
+
+            # 1 Structural multiplication sparse safe
+            structural = tf.sparse.sparse_dense_matmul(adjacent_sparse, feature_weights)
+
+            # 2 Sparse Learning
+            embeddings_weights = tf.matmul(learned_embeddings, feature_weights, transpose_a=True)
+            
+            learned = tf.matmul(learned_embeddings, embeddings_weights)
+
+            output += structural + self.alpha * learned
 
         return tf.nn.relu(output)
