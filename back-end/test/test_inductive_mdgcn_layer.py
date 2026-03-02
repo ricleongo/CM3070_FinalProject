@@ -6,22 +6,22 @@ from tensorflow.keras import layers
 
 from unittest.mock import patch
 
-from src.app.inductive_mdgcn_layer import InductiveMDGCNLayer
+from src.app.mdgcn.inductive.layer import InductiveLayer
 
 @pytest.fixture
 def layer():
     in_dim = 3
     out_dim = 2
     K = 1
-    return InductiveMDGCNLayer(in_dim, out_dim, K)
+    return InductiveLayer(in_dim, out_dim, K)
 
 def test_InductiveMDGCNLayer_extend_keras_layer():
     # Assert
-    assert issubclass(InductiveMDGCNLayer, layers.Layer)
+    assert issubclass(InductiveLayer, layers.Layer)
 
 def test_init_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer.__init__)
+    function_signature = inspect.signature(InductiveLayer.__init__)
     function_params = function_signature.parameters
 
     # Assert
@@ -38,7 +38,7 @@ def test_init_params_values_valid():
     K = 4
 
     # Act
-    class_layer = InductiveMDGCNLayer(in_dim, out_dim, K)
+    class_layer = InductiveLayer(in_dim, out_dim, K)
 
     # Assert
     assert class_layer.in_dim == in_dim
@@ -63,7 +63,7 @@ def test_init_call_internal_functions(layer):
 
 def test_set_kernels_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer._set_kernels)
+    function_signature = inspect.signature(InductiveLayer._set_kernels)
     function_params = function_signature.parameters
 
     # Assert
@@ -83,7 +83,7 @@ def test_kernels_is_valid(layer):
 
 def test_set_embeddings_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer._set_embeddings)
+    function_signature = inspect.signature(InductiveLayer._set_embeddings)
     function_params = function_signature.parameters
 
     # Assert
@@ -99,7 +99,7 @@ def test_embeddings_is_valid(layer):
 
 def test_set_alpha_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer._set_alpha)
+    function_signature = inspect.signature(InductiveLayer._set_alpha)
     function_params = function_signature.parameters
 
     # Assert
@@ -115,7 +115,7 @@ def test_alpha_is_valid(layer):
 
 def test_build_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer.build)
+    function_signature = inspect.signature(InductiveLayer.build)
     function_params = function_signature.parameters
 
     # Assert
@@ -135,7 +135,7 @@ def test_build_invoque_internal_functions(layer):
 
 def test_get_output_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer._get_output)
+    function_signature = inspect.signature(InductiveLayer._get_output)
     function_params = function_signature.parameters
 
     # Assert
@@ -145,7 +145,7 @@ def test_get_output_has_expected_parameters():
 
 def test_call_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(InductiveMDGCNLayer.call)
+    function_signature = inspect.signature(InductiveLayer.call)
     function_params = function_signature.parameters
 
     # Assert

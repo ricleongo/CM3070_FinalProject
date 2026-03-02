@@ -1,14 +1,16 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
-class InductiveMDGCNLayer(layers.Layer):
+class InductiveLayer(layers.Layer):
     
-    def __init__(self, in_dim, out_dim, K, **kwargs):
+    def __init__(self, in_dim, out_dim, K, l2_reg=1e-4, **kwargs):
         super().__init__(**kwargs)
 
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.K = K
+
+        self.l2_reg = l2_reg
 
         self._set_embeddings()
         self._set_alpha()
@@ -24,14 +26,28 @@ class InductiveMDGCNLayer(layers.Layer):
     ### PRIVATE FUNCTIONS ###
 
     def _set_embeddings(self):
-        self.embedding_layer = layers.Dense(self.out_dim, activation=None, use_bias=False)
+        self.embedding_layer = layers.Dense(
+            self.out_dim,
+            activation=None, 
+            use_bias=False,
+            kernel_regularizer=tf.keras.regularizers.l2(self.l2_reg)
+        )
 
     def _set_alpha(self):
-        self.alpha = tf.Variable(0.1, trainable=True, dtype=tf.float32)
+        self.alpha = tf.Variable(
+            0.1,
+            trainable=True, 
+            dtype=tf.float32,
+            constraint=lambda x: tf.clip_by_value(x, 0.0, 1.0)
+        )
 
     def _set_kernels(self):
         self.kernels = [
-            layers.Dense(self.out_dim, use_bias=False)
+            layers.Dense(
+                self.out_dim,
+                use_bias=False,
+                kernel_regularizer=tf.keras.regularizers.l2(self.l2_reg)
+            )
             for _ in range(self.K + 1)
         ]
 

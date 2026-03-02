@@ -5,21 +5,19 @@ import tensorflow as tf
 from tensorflow.keras import layers
 
 from unittest.mock import patch, MagicMock
-from src.app.transductive_mdgcn_layer import TransductiveMDGCNLayer
+from src.app.mdgcn.transductive.layer import TransductiveLayer
 
 @pytest.fixture
 def layer():
     in_dim = 1
     out_dim = 2
-    num_nodes = 5
     K = 4
-    embed_dim = 3
 
-    return TransductiveMDGCNLayer(in_dim, out_dim, num_nodes, K, embed_dim)
+    return TransductiveLayer(in_dim, out_dim, K)
 
 def test_init_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer.__init__)
+    function_signature = inspect.signature(TransductiveLayer.__init__)
     function_params = function_signature.parameters
 
     # Assert
@@ -33,19 +31,15 @@ def test_init_params_validate():
     # Arrange
     in_dim = 1
     out_dim = 2
-    num_nodes = 5
     K = 4
-    embed_dim = 3
 
     # Act
-    class_layer = TransductiveMDGCNLayer(in_dim, out_dim, num_nodes, K, embed_dim)
+    class_layer = TransductiveLayer(in_dim, out_dim, K)
 
     # Assert
     assert class_layer.in_dim == in_dim
     assert class_layer.out_dim == out_dim
-    assert class_layer.num_nodes == num_nodes
     assert class_layer.K == K
-    assert class_layer.embed_dim == embed_dim
 
 def test_init_defines_variables(layer):
     # Assert
@@ -53,11 +47,11 @@ def test_init_defines_variables(layer):
 
 def test_TransductiveMDGCNLayer_extend_keras_layer():
     # Assert
-    assert issubclass(TransductiveMDGCNLayer, layers.Layer)
+    assert issubclass(TransductiveLayer, layers.Layer)
 
 def test_set_kernels_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer._set_kernels)
+    function_signature = inspect.signature(TransductiveLayer._set_kernels)
     function_params = function_signature.parameters
 
     # Assert
@@ -75,7 +69,7 @@ def test_kernels_has_value(layer):
 
 def test_set_embeddings_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer._set_embeddings)
+    function_signature = inspect.signature(TransductiveLayer._set_embeddings)
     function_params = function_signature.parameters
 
     # Assert
@@ -93,7 +87,7 @@ def test_embeddings_has_value(layer):
 
 def test_set_alpha_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer._set_alpha)
+    function_signature = inspect.signature(TransductiveLayer._set_alpha)
     function_params = function_signature.parameters
 
     # Assert
@@ -108,7 +102,7 @@ def test_alpha_has_value(layer):
 
 def test_build_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer.build)
+    function_signature = inspect.signature(TransductiveLayer.build)
     function_params = function_signature.parameters
 
     # Assert
@@ -130,7 +124,7 @@ def test_build_call_internal_functions(layer):
 
 def test_sparse_propagation_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer._sparse_propagation)
+    function_signature = inspect.signature(TransductiveLayer._sparse_propagation)
     function_params = function_signature.parameters
 
     # Assert
@@ -160,7 +154,7 @@ def test_sparse_propagation_valid_value(layer):
 
 def test_learned_propagation_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(TransductiveMDGCNLayer._learned_propagation)
+    function_signature = inspect.signature(TransductiveLayer._learned_propagation)
     function_params = function_signature.parameters
 
     # Assert
