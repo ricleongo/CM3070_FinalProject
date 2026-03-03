@@ -1,0 +1,150 @@
+from abc import ABC, abstractmethod
+import tensorflow as tf
+
+@tf.keras.utils.register_keras_serializable()
+class BaseSupervisedModel(tf.keras.Model, ABC):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    # --------------------------------------------------
+    # Abstract forward pass
+    # --------------------------------------------------
+    @abstractmethod
+    def call(self, node_features, adjacent_list, mask=None, training=False):
+        pass
+
+    # --------------------------------------------------
+    # Custom train step (mask-aware)
+    # --------------------------------------------------
+    def train_step(self, data):
+        (node_features, adjacent_list, mask), labels = data
+
+        with tf.GradientTape() as tape:
+            # applying MD-GCN model to node_features and adjacent_list
+            predictions = self(node_features, adjacent_list, mask=mask, training=True)
+            
+            # calculating loss weights based on labels and predictions
+            # only masked nodes will be taking care.
+            loss = self.compute_loss(labels, predictions, mask)
+
+        # applying (loss / weight)
+        gradients = tape.gradient(loss, self.trainable_variables) 
+
+        # applying backpropagation 
+        self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
+
+        return loss
+
+    # --------------------------------------------------
+    # Custom validation step
+    # --------------------------------------------------    
+    def val_step(self, data):
+        (node_features, adjacent_list, mask), labels = data
+        
+        # applying MD-GCN model to node_features and adjacent_list
+        predictions = self(node_features, adjacent_list, mask=mask, training=False)
+        
+        # calculating loss weights based on labels and predictions
+        # only masked nodes will be taking care.
+        loss = self.compute_loss(labels, predictions, mask)
+
+        return loss, predictions
+
+
+    def fit(self, node_features, adjacent_list, labels, train_mask,
+            val_data=None, epochs=100, verbose=1):
+
+        for epoch in range(epochs):
+
+            # ----- Training step -----
+            train_loss = self.train_step(((node_features, adjacent_list, train_mask), labels))
+
+            # ----- Validation step -----
+            val_loss = None
+
+            if val_data is not None:
+                val_node_features, val_adjacent_list, val_labels, val_mask = val_data
+
+                val_loss, _ = self.val_step(
+                    ((val_node_features, val_adjacent_list, val_mask), val_labels)
+                )
+
+            if verbose and epoch % 10 == 0:
+                print(f"Epoch {epoch}")
+                print("Train Loss:", float(train_loss))
+                if val_loss is not None:
+                    print("Val Loss:", float(val_loss))
+
+        self.save_model()
+
+
+    # --------------------------------------------------
+    # Manual graph evaluation
+    # --------------------------------------------------
+    def evaluate_graph(self, node_features, adjacent_list, labels, mask):
+        """
+        Custom evaluation method for masked nodes, reusing compiled metrics
+        """
+        results = {}
+
+        # Ensure mask is boolean
+        mask = tf.cast(mask, tf.bool)
+
+        # Get predictions
+        predictions = self(node_features, adjacent_list, mask=mask, training=False)
+
+        # Apply mask
+        y_true = tf.boolean_mask(labels, mask)
+        y_pred = tf.boolean_mask(predictions, mask)
+
+
+        for metric in self.metrics:
+            metric.reset_state()
+
+        for metric in self.metrics:
+            metric.update_state(y_true, y_pred)
+
+        metrics = {metric.name: metric.result() for metric in self.metrics}
+
+        loss = metrics.get("loss", {})
+        compile_metrics = metrics.get("compile_metrics", {})
+        auc = compile_metrics.get("auc", 0.0)
+        precision = compile_metrics.get("precision", 0.0)
+        recall = compile_metrics.get("recall", 0.0)
+
+        if loss is not None:
+            results['loss'] = float(loss)
+
+        if auc is not None:
+            results['auc'] = float(auc)
+        
+        if precision is not None:
+            results['precision'] = float(precision)
+        
+        if recall is not None:
+            results['recall'] = float(recall)
+
+        if precision + recall > 0:
+            results['f1'] = float(2 * precision * recall / (precision + recall + 1e-8))
+
+        return results
+    
+    @abstractmethod
+    def load_model(self):
+        pass
+
+    @abstractmethod
+    def save_model(self):
+        pass
+
+    def compute_loss(self, labels, predicted, mask):
+
+        mask = tf.cast(mask, tf.float32)
+
+        loss = tf.keras.losses.binary_crossentropy(labels, predicted)
+
+        # Apply mask
+        loss = loss * mask
+        
+        return tf.reduce_sum(loss) / tf.reduce_sum(mask)
