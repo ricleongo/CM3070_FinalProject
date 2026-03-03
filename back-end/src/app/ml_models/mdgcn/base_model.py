@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import tensorflow as tf
 
-
+@tf.keras.utils.register_keras_serializable()
 class BaseSupervisedModel(tf.keras.Model, ABC):
 
     def __init__(self, **kwargs):
@@ -26,7 +26,7 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
             
             # calculating loss weights based on labels and predictions
             # only masked nodes will be taking care.
-            loss = self._compute_loss(labels, predictions, mask)
+            loss = self.compute_loss(labels, predictions, mask)
 
         # applying (loss / weight)
         gradients = tape.gradient(loss, self.trainable_variables) 
@@ -47,18 +47,18 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         
         # calculating loss weights based on labels and predictions
         # only masked nodes will be taking care.
-        loss = self._compute_loss(labels, predictions, mask)
+        loss = self.compute_loss(labels, predictions, mask)
 
         return loss, predictions
 
 
-    def fit(self, node_features, adjacent_dist_list, labels, train_mask,
+    def fit(self, node_features, adjacent_list, labels, train_mask,
             val_data=None, epochs=100, verbose=1):
 
         for epoch in range(epochs):
 
             # ----- Training step -----
-            train_loss = self.train_step(((node_features, adjacent_dist_list, train_mask), labels))
+            train_loss = self.train_step(((node_features, adjacent_list, train_mask), labels))
 
             # ----- Validation step -----
             val_loss = None
@@ -75,6 +75,8 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
                 print("Train Loss:", float(train_loss))
                 if val_loss is not None:
                     print("Val Loss:", float(val_loss))
+
+        self.save_model()
 
 
     # --------------------------------------------------
@@ -127,9 +129,16 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
             results['f1'] = float(2 * precision * recall / (precision + recall + 1e-8))
 
         return results
+    
+    @abstractmethod
+    def load_model(self):
+        pass
 
+    @abstractmethod
+    def save_model(self):
+        pass
 
-    def _compute_loss(self, labels, predicted, mask):
+    def compute_loss(self, labels, predicted, mask):
 
         mask = tf.cast(mask, tf.float32)
 

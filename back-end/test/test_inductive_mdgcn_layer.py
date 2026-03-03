@@ -6,7 +6,7 @@ from tensorflow.keras import layers
 
 from unittest.mock import patch
 
-from src.app.mdgcn.inductive.layer import InductiveLayer
+from src.app.ml_models.mdgcn.inductive.layer import InductiveLayer
 
 @pytest.fixture
 def layer():
@@ -141,7 +141,7 @@ def test_get_output_has_expected_parameters():
     # Assert
     assert 'self' in function_params
     assert 'node_features' in function_params
-    assert 'adjacent_dist_list' in function_params
+    assert 'adjacent_list' in function_params
 
 def test_call_has_expected_parameters():
     # Arrange
@@ -151,7 +151,7 @@ def test_call_has_expected_parameters():
     # Assert
     assert 'self' in function_params
     assert 'X' in function_params
-    assert 'adjacent_dist_list' in function_params
+    assert 'adjacent_list' in function_params
 
 def test_call_invoque_internal_functions(layer):
     # Arrange
@@ -160,7 +160,7 @@ def test_call_invoque_internal_functions(layer):
     F = layer.in_dim    
     X = tf.random.normal((N, F))
 
-    adjacent_dist_list = [
+    adjacent_list = [
         tf.eye(N) for _ in range(layer.K + 1)
     ]
 
@@ -168,7 +168,7 @@ def test_call_invoque_internal_functions(layer):
 
     with patch.object(layer, "_get_output", wraps=layer._get_output) as spy_get_output:
         # Act
-        output = layer.call(X, adjacent_dist_list)
+        output = layer.call(X, adjacent_list)
                 
         # Assert
         assert output.shape == (N, layer.out_dim)

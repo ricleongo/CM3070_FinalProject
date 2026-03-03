@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
+@tf.keras.utils.register_keras_serializable()
 class InductiveLayer(layers.Layer):
     
     def __init__(self, in_dim, out_dim, K, l2_reg=1e-4, **kwargs):
@@ -20,8 +21,18 @@ class InductiveLayer(layers.Layer):
     def build(self, input_shape):
         self._set_kernels()
 
-    def call(self, X, adjacent_dist_list):
-        return self._get_output(X, adjacent_dist_list)
+    def call(self, X, adjacent_list):
+        return self._get_output(X, adjacent_list)
+    
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "in_dim": self.in_dim,
+            "out_dim": self.out_dim,
+            "K": self.K,
+            "l2_reg": self.l2_reg
+        })
+        return config
 
     ### PRIVATE FUNCTIONS ###
 

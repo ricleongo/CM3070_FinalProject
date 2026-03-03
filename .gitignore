@@ -180,4 +180,5 @@ notebook/templates/*.html
 # Temporary files used for testing
 tmp/
 
+# Excluding Elliptic Data Files
 back-end/data/elliptic/elliptic_txs_*.csv
