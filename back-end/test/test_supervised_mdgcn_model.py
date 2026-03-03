@@ -5,8 +5,8 @@ import tensorflow as tf
 
 from unittest.mock import patch
 
-from src.app.mdgcn.transductive.model import SupervisedTransductiveModel
-from src.app.mdgcn.transductive.layer import TransductiveLayer
+from src.app.ml_models.mdgcn.transductive.model import SupervisedTransductiveModel
+from src.app.ml_models.mdgcn.transductive.layer import TransductiveLayer
 
 @pytest.fixture
 def model():
@@ -95,11 +95,11 @@ def test_call_has_expected_parameters():
     # Assert
     assert 'self' in function_params
     assert 'node_features' in function_params
-    assert 'adjacent_dist_list' in function_params
+    assert 'adjacent_list' in function_params
 
 def test_compute_loss_has_expected_parameters():
     # Arrange
-    function_signature = inspect.signature(SupervisedTransductiveModel._compute_loss)
+    function_signature = inspect.signature(SupervisedTransductiveModel.compute_loss)
     function_params = function_signature.parameters
 
     # Assert

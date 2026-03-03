@@ -5,7 +5,7 @@ import tensorflow as tf
 from tensorflow.keras import layers
 
 from unittest.mock import patch, MagicMock
-from src.app.mdgcn.transductive.layer import TransductiveLayer
+from src.app.ml_models.mdgcn.transductive.layer import TransductiveLayer
 
 @pytest.fixture
 def layer():

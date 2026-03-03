@@ -1,12 +1,17 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
+@tf.keras.utils.register_keras_serializable()
 class TransductiveLayer(layers.Layer):
     
-    def __init__(self, in_dim, out_dim, K,
-                dropout_rate=0.5,
-                l2_reg=1e-4,
-                **kwargs):
+    def __init__(
+            self, 
+            in_dim, 
+            out_dim, 
+            K,
+            dropout_rate=0.5,
+            l2_reg=1e-4,
+            **kwargs):
         super().__init__(**kwargs)
         
         self.in_dim = in_dim
@@ -58,6 +63,15 @@ class TransductiveLayer(layers.Layer):
 
         return output
 
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "in_dim": self.in_dim,
+            "out_dim": self.out_dim,
+            "K": self.K,
+            "dropout_rate": self.dropout_rate,
+            "l2_reg": self.l2_reg
+        })
 
     ### PRIVATE FUNCTIONS ###
 
