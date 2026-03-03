@@ -1,9 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from pydantic import BaseModel
 
 from .config import get_settings, Settings
 
@@ -28,16 +27,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# JSON Schema
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-
-# Example Routes
+# Root Route
 @app.get("/")
-# @limiter.limit("5/minute")  # Rate limit: 5 requests per minute
-async def root(settings: Settings = Depends(get_settings)):
+@limiter.limit("5/minute")
+async def root(
+    request: Request,
+    settings: Settings = Depends(get_settings)):
     return {"message": f"Welcome to {settings.APP_NAME}"}
 
 # Health check Route
@@ -45,4 +40,5 @@ async def root(settings: Settings = Depends(get_settings)):
 async def health_check():
     return {"status": "online"}
 
+# API/V1 Routes
 app.include_router(api_router, prefix="/api/v1")
