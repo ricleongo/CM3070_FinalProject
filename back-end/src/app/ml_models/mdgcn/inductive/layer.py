@@ -4,13 +4,21 @@ from tensorflow.keras import layers
 @tf.keras.utils.register_keras_serializable()
 class InductiveLayer(layers.Layer):
     
-    def __init__(self, in_dim, out_dim, K, l2_reg=1e-4, **kwargs):
+    def __init__(
+            self, 
+            in_dim, 
+            out_dim, 
+            K, 
+            dropout_rate=0.3,
+            l2_reg=1e-4, 
+            **kwargs):
         super().__init__(**kwargs)
 
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.K = K
 
+        self.dropout_rate = dropout_rate
         self.l2_reg = l2_reg
 
         self._set_embeddings()
@@ -21,8 +29,11 @@ class InductiveLayer(layers.Layer):
     def build(self, input_shape):
         self._set_kernels()
 
-    def call(self, X, adjacent_list):
-        return self._get_output(X, adjacent_list)
+        # Adding dropout layer
+        self.dropout = layers.Dropout(self.dropout_rate)
+
+    def call(self, node_features, adjacent_list, training=False):
+        return self._get_output(node_features, adjacent_list, training)
     
     def get_config(self):
         config = super().get_config()
@@ -30,6 +41,7 @@ class InductiveLayer(layers.Layer):
             "in_dim": self.in_dim,
             "out_dim": self.out_dim,
             "K": self.K,
+            "dropout_rate": self.dropout_rate,
             "l2_reg": self.l2_reg
         })
         return config
@@ -53,7 +65,7 @@ class InductiveLayer(layers.Layer):
         )
 
     def _set_kernels(self):
-        self.kernels = [
+        self.feature_kernels = [
             layers.Dense(
                 self.out_dim,
                 use_bias=False,
@@ -62,29 +74,43 @@ class InductiveLayer(layers.Layer):
             for _ in range(self.K + 1)
         ]
 
-    def _get_output(self, node_features, adjacent_list):
+        self.embedding_kernels = [
+            layers.Dense(
+                self.out_dim,
+                use_bias=False,
+                kernel_regularizer=tf.keras.regularizers.l2(self.l2_reg)
+            )
+            for _ in range(self.K + 1)
+        ]        
+
+    def _get_output(self, node_features, adjacent_list, training=False):
         """
         node_features: node features [N, F]
-        adjacent_list: list of adjacency matrices [N, N] (can be sparse)
+        adjacent_list: list of adjacency matrices
         """
 
+        # Precompute embeddings
         learned_embeddings = self.embedding_layer(node_features)
-        output = 0.0
+        
+        output = tf.zeros_like(self.feature_kernels[0](node_features))
 
         for hop in range(self.K + 1):
 
             adjacent_sparse = adjacent_list[hop]
 
-            feature_weights = self.kernels[hop](node_features)
+            feature_weights = self.feature_kernels[hop](node_features)
 
-            # 1 Structural multiplication sparse safe
-            structural = tf.sparse.sparse_dense_matmul(adjacent_sparse, feature_weights)
+            # sparse mathematical multiplication.
+            structural = tf.sparse.sparse_dense_matmul(
+                adjacent_sparse, 
+                feature_weights
+            )
 
-            # 2 Sparse Learning
-            embeddings_weights = tf.matmul(learned_embeddings, feature_weights, transpose_a=True)
-            
-            learned = tf.matmul(learned_embeddings, embeddings_weights)
+            learned = self.embedding_kernels[hop](learned_embeddings)
 
             output += structural + self.alpha * learned
+
+        # Add dropout before ReLu
+        output = self.dropout(output, training=training)
 
         return tf.nn.relu(output)
