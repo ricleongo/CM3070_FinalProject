@@ -12,6 +12,10 @@ class SupervisedInductiveModel(BaseSupervisedModel):
         self.hidden_dim = hidden_dim
         self.K = K
 
+        # Add dropout layer.
+        self.pre_classifier_dropout = tf.keras.layers.Dropout(0.3)
+
+        # Add Classification Layer.
         self.classifier_layer = tf.keras.layers.Dense(1, activation='sigmoid')
 
     @staticmethod
@@ -46,19 +50,20 @@ class SupervisedInductiveModel(BaseSupervisedModel):
         self._set_distance_layer()
 
     def call(self, node_features, adjacent_list, mask=None, training=False):
-        # 1. MD-GCN inductive output
-        mdgcn_results = self.distance_layer(node_features, adjacent_list, training=training) # type: ignore
+        # MD-GCN inductive output
+        mdgcn_results = self.distance_layer(node_features, adjacent_list)
 
-        # 2. Appying mask-aware
+        # Appying mask-aware
         if mask is not None:
             mask = tf.cast(mask[:, None], mdgcn_results.dtype)
 
             mdgcn_results = mdgcn_results * mask
 
-            # mdgcn_results = mdgcn_results * tf.expand_dims(mask, axis=-1)
+        mdgcn_results = self.pre_classifier_dropout(mdgcn_results, training=training)
 
-        # 3. Classification
+        # Classification
         return self.classifier_layer(mdgcn_results)
+
 
     def _set_distance_layer(self):
         self.distance_layer = InductiveLayer(
