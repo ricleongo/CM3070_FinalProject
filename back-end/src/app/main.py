@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from contextlib import asynccontextmanager
 
 from .config import get_settings, Settings
 
 from src.app.api.v1.router import api_router
+from src.app.services.elliptic_snapshot import EllipticSnapshotSingleton
 
 # Getting App Settings
 settings = get_settings()
@@ -14,7 +16,21 @@ settings = get_settings()
 # Initialize Rate Limiter
 limiter = Limiter(key_func=get_remote_address)
 
-app = FastAPI(title = settings.APP_NAME)
+elliptic_snapshot: EllipticSnapshotSingleton | None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    global elliptic_snapshot
+
+    elliptic_snapshot = EllipticSnapshotSingleton("data/ml_data")
+
+    yield
+
+    elliptic_snapshot = None
+
+
+app = FastAPI(title = settings.APP_NAME, lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler) # type: ignore
 
