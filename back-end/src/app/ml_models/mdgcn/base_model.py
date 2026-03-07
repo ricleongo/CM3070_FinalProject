@@ -7,6 +7,9 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.train_weighted = False
+        self.pos_weight = 11.0
+
     # --------------------------------------------------
     # Abstract forward pass
     # --------------------------------------------------
@@ -26,7 +29,10 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
             
             # calculating loss weights based on labels and predictions
             # only masked nodes will be taking care.
-            loss = self.compute_loss(labels, predictions, mask)
+            if self.train_weighted:
+                loss = self.compute_loss_with_weights(labels, predictions, mask, weights = self.pos_weight)
+            else:
+                loss = self.compute_loss(labels, predictions, mask)
 
         # applying (loss / weight)
         gradients = tape.gradient(loss, self.trainable_variables) 
@@ -47,7 +53,10 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         
         # calculating loss weights based on labels and predictions
         # only masked nodes will be taking care.
-        loss = self.compute_loss(labels, predictions, mask)
+        if self.train_weighted:
+            loss = self.compute_loss_with_weights(labels, predictions, mask, weights = self.pos_weight)
+        else:
+            loss = self.compute_loss(labels, predictions, mask)
 
         return loss, predictions
 
@@ -82,7 +91,7 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
     # --------------------------------------------------
     # Manual graph evaluation
     # --------------------------------------------------
-    def evaluate_graph(self, node_features, adjacent_list, labels, mask):
+    def evaluate_graph(self, node_features, adjacent_list, labels, mask, threshold=0.5):
         """
         Custom evaluation method for masked nodes, reusing compiled metrics
         """
@@ -98,17 +107,21 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         y_true = tf.boolean_mask(labels, mask)
         y_pred = tf.boolean_mask(predictions, mask)
 
+        # Apply threshold
+        y_pred_binary = tf.cast(y_pred > threshold, y_true.dtype)
 
         for metric in self.metrics:
             metric.reset_state()
 
+        # Update metrics using binary predictions
         for metric in self.metrics:
-            metric.update_state(y_true, y_pred)
+            metric.update_state(y_true, y_pred_binary)
 
         metrics = {metric.name: metric.result() for metric in self.metrics}
 
         loss = metrics.get("loss", {})
         compile_metrics = metrics.get("compile_metrics", {})
+        
         auc = compile_metrics.get("auc", 0.0)
         precision = compile_metrics.get("precision", 0.0)
         recall = compile_metrics.get("recall", 0.0)
@@ -139,12 +152,33 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         pass
 
     def compute_loss(self, labels, predicted, mask):
+        """Calculating Loss using normal Binary Cross Entropy function"""
 
         mask = tf.cast(mask, tf.float32)
 
+        # Binary Cross Entropy
         loss = tf.keras.losses.binary_crossentropy(labels, predicted)
 
         # Apply mask
         loss = loss * mask
         
-        return tf.reduce_sum(loss) / tf.reduce_sum(mask)
+        return tf.reduce_sum(loss) / (tf.reduce_sum(mask) + 1e-8)
+
+    def compute_loss_with_weights(self, labels, predicted, mask, weights):
+        """Calculating Loss using weighted Binary Cross Entropy manual calculation"""
+
+        mask = tf.cast(mask, tf.float32)
+
+        # Binary Cross Entropy
+        loss = tf.keras.losses.binary_crossentropy(labels, predicted)
+
+        # Build class weights
+        class_weights = labels * weights + ( 1 - labels )
+
+        # Apply weights
+        loss = loss * class_weights
+        
+        # Apply mask
+        loss = loss * mask
+        
+        return tf.reduce_sum(loss) / (tf.reduce_sum(mask) + 1e-8)

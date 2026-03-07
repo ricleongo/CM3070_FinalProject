@@ -1,13 +1,14 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from pydantic import BaseModel
+from contextlib import asynccontextmanager
 
 from .config import get_settings, Settings
 
 from src.app.api.v1.router import api_router
+from src.app.services.elliptic_snapshot import EllipticSnapshotSingleton
 
 # Getting App Settings
 settings = get_settings()
@@ -15,7 +16,21 @@ settings = get_settings()
 # Initialize Rate Limiter
 limiter = Limiter(key_func=get_remote_address)
 
-app = FastAPI(title = settings.APP_NAME)
+elliptic_snapshot: EllipticSnapshotSingleton | None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    global elliptic_snapshot
+
+    elliptic_snapshot = EllipticSnapshotSingleton("data/ml_data")
+
+    yield
+
+    elliptic_snapshot = None
+
+
+app = FastAPI(title = settings.APP_NAME, lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler) # type: ignore
 
@@ -28,16 +43,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# JSON Schema
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-
-# Example Routes
+# Root Route
 @app.get("/")
-# @limiter.limit("5/minute")  # Rate limit: 5 requests per minute
-async def root(settings: Settings = Depends(get_settings)):
+@limiter.limit("5/minute")
+async def root(
+    request: Request,
+    settings: Settings = Depends(get_settings)):
     return {"message": f"Welcome to {settings.APP_NAME}"}
 
 # Health check Route
@@ -45,4 +56,5 @@ async def root(settings: Settings = Depends(get_settings)):
 async def health_check():
     return {"status": "online"}
 
+# API/V1 Routes
 app.include_router(api_router, prefix="/api/v1")

@@ -182,3 +182,7 @@ tmp/
 
 # Excluding Elliptic Data Files
 back-end/data/elliptic/elliptic_txs_*.csv
+
+# Excluding Snapshot Pre-Trained Files
+back-end/data/ml_data/adjacent_hop_*.npz
+back-end/data/ml_data/node_features.npy
