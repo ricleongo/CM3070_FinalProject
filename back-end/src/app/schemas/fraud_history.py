@@ -5,9 +5,9 @@ class TransactionScore(BaseModel):
     transaction_index: int
     fraud_probability: float
 
-class FraudAMLRequest(BaseModel):
+class FraudHistoryRequest(BaseModel):
     transaction_ids: List[int]
 
-class FraudAMLResponse(BaseModel):
+class FraudHistoryResponse(BaseModel):
     scores: List[TransactionScore] | None
 

@@ -1,4 +1,4 @@
-from src.app.schemas.fraud_aml import TransactionScore
+from src.app.schemas.fraud_history import TransactionScore
 from src.app.schemas.network_risk import RiskScore
 
 class TransductiveScoringService:
