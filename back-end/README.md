@@ -6,9 +6,13 @@ This is the part of the project where all the logic related to collecting data t
 
 **Installation:**
 
+Create a virtual environment inside the back-end folder:
+
+> python3 -m venv .venv
+
 All the necesary libraries needed for this Python project are located in the `requirements.txt` file, and the way to start installation of those libraries is running this command line:
 
-> pip install requirementes.txt
+> pip install -r requirements.txt
 
 <p>&nbsp;</p>
 
