@@ -5,6 +5,7 @@ from src.app.schemas.fraud_history import TransactionScore
 from src.app.schemas.network_risk import RiskScore
 from src.app.schemas.network_laundering import LaunderingScore
 from src.app.schemas.cluster_analysis import ClusterAnalysisScore
+from src.app.schemas.network_subgraph import SubGraphNode, SubGraphEdge
 
 class TransductiveScoringService:
 
@@ -160,7 +161,74 @@ class TransductiveScoringService:
 
         return results[:limit]
 
-    
+    def extract_network_subgraph(self, transaction_id, hop_depth=2):
+
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+
+        transaction_index = elliptic_snapshot.get_index_by_transaction(transaction_id)
+
+        predictions = self._get_network_predictions(elliptic_snapshot)
+
+
+        scipy_sparce_adjacent_list = elliptic_snapshot.get_scipy_sparce_adjacent_hops()
+
+        neighbors = set([transaction_index])
+
+        frontier = {transaction_index}
+
+        for hop in range(1, hop_depth + 1):
+
+            adjacency = scipy_sparce_adjacent_list[hop]
+
+            next_frontier = set()
+
+            for node in frontier:
+                new_neighbors = adjacency.getrow(node).indices
+                next_frontier.update(new_neighbors)
+
+            neighbors.update(next_frontier)
+            frontier = next_frontier
+
+        nodes = list(neighbors)
+
+        adjacency = scipy_sparce_adjacent_list[1]
+
+        edges = []
+
+        for node in nodes:
+
+            neighbors = adjacency.getrow(node).indices
+
+            for n in neighbors:
+                if n in nodes:
+                    edges.append((node, n))
+
+        index_to_tx = elliptic_snapshot.get_transaction_by_index
+
+        node_list = [
+            SubGraphNode(
+                transaction_id = index_to_tx(n),
+                risk = float(predictions[n])   
+            )
+            for n in nodes
+        ]
+
+        edge_list = [
+            SubGraphEdge(
+                source_transaction_id = index_to_tx(s),
+                target_transaction_id = index_to_tx(t)                
+            )
+            for s, t in edges
+        ]
+
+        return {
+            "nodes": node_list,
+            "edges": edge_list
+        }    
+
 
     def _get_network_predictions(self, elliptic_snapshot):
         # Collect Elliptic Snapshot generated in training step.
@@ -174,3 +242,4 @@ class TransductiveScoringService:
 
         # Flatten results.
         return predictions.numpy().flatten()
+    
