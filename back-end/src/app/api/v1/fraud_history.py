@@ -11,9 +11,8 @@ router = APIRouter()
 model = SupervisedTransductiveModel.load_model()
 service = TransductiveScoringService(model)
 
-# (AML) = Anti Money Laundering, detecting from a list of transactions.
 @router.post("/fraud/history", response_model=FraudHistoryResponse)
-def detect_fraud_history(request: FraudHistoryRequest):
+def find_fraud_history(request: FraudHistoryRequest):
     """
         Investigation over the historical transactions for posible fraud
 
@@ -26,7 +25,7 @@ def detect_fraud_history(request: FraudHistoryRequest):
             - identify laundering networks
     """
 
-    scores = service.score_aml(
+    scores = service.score_history(
         request.transaction_ids
     )
 
