@@ -39,12 +39,19 @@ class EllipticSnapshotSingleton:
         )
 
         with open(f"{snapshot_dir}/transaction_to_index.json") as f:
-            self.transaction_to_index = json.load(f)        
+            self.transaction_to_index = json.load(f)
+
+            self.index_to_transaction = {
+                index: transaction for transaction, index in self.transaction_to_index.items()
+            }
 
         self._initialized = True
 
     def get_index_by_transaction(self, transaction_id):
         return self.transaction_to_index.get(str(transaction_id))
+    
+    def get_transaction_by_index(self, transaction_index: int):
+        return self.index_to_transaction.get(transaction_index)
     
     def get_node_features(self):
         return self.node_features
