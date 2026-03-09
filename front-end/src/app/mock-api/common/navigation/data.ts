@@ -3,37 +3,31 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'dashboard',
+        title: 'Dashboard',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
-    }
-];
-export const compactNavigation: FuseNavigationItem[] = [
+    },
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'transfer',
+        title: 'Transfer',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
+        icon : 'heroicons_outline:arrow-right-on-rectangle',
         link : '/example'
-    }
-];
-export const futuristicNavigation: FuseNavigationItem[] = [
+    },
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'wallet',
+        title: 'Crypto Wallet',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
+        icon : 'heroicons_outline:wallet',
         link : '/example'
-    }
-];
-export const horizontalNavigation: FuseNavigationItem[] = [
+    },
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'contributor',
+        title: 'Contributor',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
+        icon : 'heroicons_outline:adjustments-horizontal',
         link : '/example'
     }
 ];
