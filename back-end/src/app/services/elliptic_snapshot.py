@@ -58,7 +58,10 @@ class EllipticSnapshotSingleton:
     
     def get_adjacent_hops(self):
         return [self._scipy_to_tf_sparse(adjacent) for adjacent in self.adjacent_hops]
-    
+
+    def convert_sparse_list_to_tensors(self, sparse_list):
+        return [self._scipy_to_tf_sparse(adjacent) for adjacent in sparse_list]
+
     def get_scipy_sparce_adjacent_hops(self):
         return self.adjacent_hops
     
