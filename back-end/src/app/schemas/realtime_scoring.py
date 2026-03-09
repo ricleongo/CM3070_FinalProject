@@ -1,8 +1,7 @@
 from pydantic import BaseModel, computed_field
-from typing import List
 
-class TransactionScore(BaseModel):
-    transaction_index: int
+class RealtimeScoring(BaseModel):
+    transaction_id: int
     fraud_probability: float
 
     @computed_field
@@ -19,11 +18,12 @@ class TransactionScore(BaseModel):
             return "high"
 
         return "critical"
-    
 
-class FraudHistoryRequest(BaseModel):
-    transaction_ids: List[int]
 
-class FraudHistoryResponse(BaseModel):
-    scores: List[TransactionScore] | None
+class RealtimeScoringRequest(BaseModel):
+    transaction_id: int
+
+class RealtimeScoringResponse(BaseModel):
+    score: RealtimeScoring | None
+
 
