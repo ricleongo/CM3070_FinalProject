@@ -13,8 +13,8 @@ api_router = APIRouter()
 
 # Transductive Use Cases:
 api_router.include_router(history_router, tags=["Detecting Fraud By History"])
-api_router.include_router(network_risk_router, tags=["Network Risk"])
 api_router.include_router(cluster_analysis, tags=["Cluster Analysis"])
+api_router.include_router(network_risk_router, tags=["Network Risk"])
 api_router.include_router(network_laundering, tags=["Network Money Laundering"])
 api_router.include_router(network_subgraph, tags=["Pulling Network Subgraph by Transaction Id"])
 

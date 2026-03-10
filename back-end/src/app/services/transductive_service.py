@@ -176,52 +176,63 @@ class TransductiveScoringService:
         scipy_sparce_adjacent_list = elliptic_snapshot.get_scipy_sparce_adjacent_hops()
 
         neighbors = set([transaction_index])
-
-        frontier = {transaction_index}
+        current_adjacent = { transaction_index }
 
         for hop in range(1, hop_depth + 1):
 
             adjacency = scipy_sparce_adjacent_list[hop]
 
-            next_frontier = set()
+            next_adjacent = set()
 
-            for node in frontier:
-                new_neighbors = adjacency.getrow(node).indices
-                next_frontier.update(new_neighbors)
+            for node in current_adjacent:
+                new_neighbors = [int(n) for n in adjacency.getrow(node).indices]
 
-            neighbors.update(next_frontier)
-            frontier = next_frontier
+                next_adjacent.update(new_neighbors)
 
-        nodes = list(neighbors)
+            neighbors.update(next_adjacent) # Adding on top of the stack.
+
+            current_adjacent = next_adjacent # Updating the next adjacent node.
+
+        transaction_indices = list(neighbors) # Converting from dictionary to a list.
 
         adjacency = scipy_sparce_adjacent_list[1]
 
         edges = []
+        new_neighbors = []
 
-        for node in nodes:
+        print('transaction_indices:', transaction_indices)
 
-            neighbors = adjacency.getrow(node).indices
 
-            for n in neighbors:
-                if n in nodes:
-                    edges.append((node, n))
+        for node_index in transaction_indices:
 
-        index_to_tx = elliptic_snapshot.get_transaction_by_index
+            neighbors = [int(n) for n in adjacency.getrow(node_index).indices]
+
+            for neighbor in neighbors:
+                # if neighbor in transaction_indices:
+                edges.append((node_index, neighbor))
+                new_neighbors.append(neighbor)
+
+
+        [transaction_indices.append(neighbor) for neighbor in new_neighbors]
+        transaction_indices = set(transaction_indices)
+        transaction_indices = list(transaction_indices)
+        
+        index_to_transaction_id = elliptic_snapshot.get_transaction_by_index
 
         node_list = [
             SubGraphNode(
-                transaction_id = index_to_tx(n),
-                risk = float(predictions[n])   
+                transaction_id = index_to_transaction_id(node_index),
+                risk = float(predictions[node_index])   
             )
-            for n in nodes
+            for node_index in transaction_indices
         ]
 
         edge_list = [
             SubGraphEdge(
-                source_transaction_id = index_to_tx(s),
-                target_transaction_id = index_to_tx(t)                
+                source_transaction_id = index_to_transaction_id(source),
+                target_transaction_id = index_to_transaction_id(target)                
             )
-            for s, t in edges
+            for source, target in edges
         ]
 
         return {

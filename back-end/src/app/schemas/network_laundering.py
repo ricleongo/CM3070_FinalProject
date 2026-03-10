@@ -8,5 +8,8 @@ class LaunderingScore(BaseModel):
     max_risk: float
     suspicious_nodes: int
 
+class NetworkLaunderingRequest(BaseModel):
+    top_limit: int = 5
+
 class NetworkLaunderingResponse(BaseModel):
     score: List[LaunderingScore] | None

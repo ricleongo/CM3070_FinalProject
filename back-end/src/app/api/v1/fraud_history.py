@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedTransductiveModel.load_model()
 service = TransductiveScoringService(model)
 
-@router.post("/fraud/history", response_model=FraudHistoryResponse)
+@router.post("/transductive/history", response_model=FraudHistoryResponse)
 def find_fraud_history(request: FraudHistoryRequest):
     """
         Investigation over the historical transactions for posible fraud
