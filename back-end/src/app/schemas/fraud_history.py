@@ -2,7 +2,7 @@ from pydantic import BaseModel, computed_field
 from typing import List
 
 class TransactionScore(BaseModel):
-    transaction_index: int
+    transaction_id: int
     fraud_probability: float
 
     @computed_field

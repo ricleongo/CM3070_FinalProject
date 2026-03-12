@@ -27,7 +27,7 @@ class TransductiveScoringService:
 
         return [
             TransactionScore(
-                transaction_index = index, 
+                transaction_id = elliptic_snapshot.get_transaction_by_index(index), 
                 fraud_probability=float(score)
             )
             for index, score in enumerate(predictions)
@@ -146,15 +146,16 @@ class TransductiveScoringService:
         for cluster_index, cluster in enumerate(clusters):
 
             cluster_nodes = list(cluster)
+            cluster_transaction_ids = [elliptic_snapshot.get_transaction_by_index(node_index) for node_index in cluster_nodes]
 
             cluster_scores = predictions[cluster_nodes]
 
             results.append(LaunderingScore(
-                cluster_id = cluster_index,
+                cluster_id = elliptic_snapshot.get_transaction_by_index(cluster_index),
                 cluster_size = len(cluster_nodes),
                 mean_risk = float(cluster_scores.mean()),
                 max_risk = float(cluster_scores.max()),
-                suspicious_nodes = int((cluster_scores > risk_threshold).sum())                
+                suspicious_nodes = cluster_transaction_ids #int((cluster_scores > risk_threshold).sum())                
             ))
 
         results.sort(key=lambda x: x.mean_risk, reverse=True)

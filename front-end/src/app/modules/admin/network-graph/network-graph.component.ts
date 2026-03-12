@@ -40,9 +40,9 @@ export class NetworkGraphComponent implements AfterViewInit {
               'label': 'data(label)',
               'width': 'mapData(risk, 0, 1, 20, 60)',
               'height': 'mapData(risk, 0, 1, 20, 60)',
-              'font-size': 10,
+              'font-size': 5,
               'text-valign': 'center',
-              'color': '#000'
+              'color': 'data(textcolor)',
             }
           },
           {
@@ -72,9 +72,10 @@ export class NetworkGraphComponent implements AfterViewInit {
     const nodes = data.nodes.map(n => ({
       data: {
         id: n.transaction_id,
-        label: `tx-${n.transaction_id}`,
+        label: n.transaction_id,
         risk: n.risk,
-        color: this.getRiskColor(n.risk)
+        color: this.getRiskColor(n.risk),
+        textcolor: this.getRiskTextColor(n.risk)
       }
     }));
 
@@ -97,6 +98,13 @@ export class NetworkGraphComponent implements AfterViewInit {
     return '#ef4444';                    // red
   }
 
+  private getRiskTextColor(risk: number): string {
+
+    if (risk < 0.30) return '#0e5d2b';   // green
+    if (risk < 0.60) return '#6c580a';   // yellow
+    if (risk < 0.85) return '#854e21';   // orange
+    return '#8d2727';                    // red
+  }
   private registerEvents() {
 
     this.cy.on('tap', 'node', (event) => {

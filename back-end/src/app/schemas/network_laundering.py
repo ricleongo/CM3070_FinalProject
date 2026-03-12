@@ -6,7 +6,7 @@ class LaunderingScore(BaseModel):
     cluster_size: int
     mean_risk: float
     max_risk: float
-    suspicious_nodes: int
+    suspicious_nodes: List[int]
 
 class NetworkLaunderingRequest(BaseModel):
     top_limit: int = 5
