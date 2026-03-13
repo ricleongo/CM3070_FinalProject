@@ -8,8 +8,15 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
 
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
-import { Subject } from "rxjs";
+import { BehaviorSubject, combineLatest, map, Observable, Subject } from "rxjs";
 import { Router } from "@angular/router";
+
+import { AnalysisService } from './analysis.service';
+import { MLModelType } from "./model_type.enum";
+import { EvaluationMetrics } from "./evaluation_metrics.type";
+import { AsyncPipe, JsonPipe } from "@angular/common";
+import { LossResults, LossResultsResponse } from "./loss_results.type";
+import { BarSeries, LineSeries } from "./series_type";
 
 @Component({
     selector: 'model-analysis',
@@ -17,6 +24,8 @@ import { Router } from "@angular/router";
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
+        AsyncPipe,
+        JsonPipe,
         MatIconModule,
         MatButtonModule,
         MatRippleModule,
@@ -26,16 +35,28 @@ import { Router } from "@angular/router";
         NgApexchartsModule,
         MatTableModule,
     ]
-
 })
 export class ModelAnalysisComponent implements OnInit, OnDestroy {
 
     chartModelEvaluation: ApexOptions = {};
+    chartTrainValLoss: ApexOptions = {};
+    transductiveMetrics: BehaviorSubject<number[]> = new BehaviorSubject([]);
+    inductiveMetrics: BehaviorSubject<number[]> = new BehaviorSubject([]);
+    transductiveSpecialMetrics: BehaviorSubject<EvaluationMetrics> = new BehaviorSubject(null);
+    inductiveSpecialMetrics: BehaviorSubject<EvaluationMetrics> = new BehaviorSubject(null);
+    currentSpecialMetrics: BehaviorSubject<EvaluationMetrics> = new BehaviorSubject(null);
+    modelType: BehaviorSubject<MLModelType> = new BehaviorSubject(MLModelType.Transductive);
+
+    transductiveTrainLoss: BehaviorSubject<LossResults[]> = new BehaviorSubject(null);
+    transductiveValLoss: BehaviorSubject<LossResults[]> = new BehaviorSubject(null);
+    inductiveTrainLoss: BehaviorSubject<LossResults[]> = new BehaviorSubject(null);
+    inductiveValLoss: BehaviorSubject<LossResults[]> = new BehaviorSubject(null);
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
-        private _router: Router
+        private _router: Router,
+        private analysisService: AnalysisService
     ) { }
 
     ngOnDestroy(): void {
@@ -45,17 +66,171 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        const transductiveSeries = {
-            name: 'Transductive (MD-GCN)',
-            data: [87, 87, 87, 75, 81], // AUC, Precision, Recall, F1, Loss(inverted)
-        };
 
-        const inductiveSeries = {
-            name: 'Transductive (MD-GCN)',
-            data: [75, 16, 64, 25, 84], // AUC, Precision, Recall, F1, Loss(inverted)
-        };
+        combineLatest([
+            this.modelType,
+            this.transductiveMetrics,
+            this.inductiveMetrics
+        ]).subscribe(([modelType, transductiveMetrics, inductiveMetrics]) => {
 
-        const currentSeries = inductiveSeries
+            const series = {
+                name: (modelType == MLModelType.Transductive) ? 'Transductive (MD-GCN)' : 'Inductive (MD-GCN)',
+                data: (modelType == MLModelType.Transductive) ? transductiveMetrics : inductiveMetrics
+            }
+
+            this._setup_radar_chart(series);
+        });
+
+        combineLatest([
+            this.modelType,
+            this.transductiveSpecialMetrics,
+            this.inductiveSpecialMetrics
+        ]).subscribe(([modelType, transductiveMetrics, inductiveMetrics]) => {
+            if (modelType == MLModelType.Transductive) {
+                this.currentSpecialMetrics.next(transductiveMetrics);
+            } else {
+                this.currentSpecialMetrics.next(inductiveMetrics);
+            }
+        });
+
+        combineLatest([
+            this.modelType,
+            this.transductiveTrainLoss,
+            this.transductiveValLoss,
+            this.inductiveTrainLoss,
+            this.inductiveValLoss
+        ]).subscribe(([modelType, transductiveTrainLoss, transductiveValLoss, inductiveTrainLoss, inductiveValLoss]) => {
+
+            if (modelType == MLModelType.Transductive) {
+                const lossLabels = transductiveTrainLoss.map(item => item.epoch);
+
+                const lossTrainSeries =
+                    new LineSeries("Train Loss", transductiveTrainLoss.map(item => item.value));
+
+                const lossValSeries =
+                    new BarSeries("Validation Loss", transductiveValLoss.map(item => item.value));
+
+                this._set_up_loss_chart(lossLabels, [lossTrainSeries, lossValSeries]);
+
+            } else {
+                const lossLabels = inductiveTrainLoss.map(item => item.epoch);
+
+                const lossTrainSeries =
+                    new LineSeries("Train Loss", inductiveTrainLoss.map(item => item.value));
+
+                const lossValSeries =
+                    new BarSeries("Validation Loss", inductiveValLoss.map(item => item.value));
+
+                this._set_up_loss_chart(lossLabels, [lossTrainSeries, lossValSeries]);
+            }
+
+        });
+
+        this._getGenericMetricsByType(MLModelType.Transductive).subscribe((metrics: number[]) => {
+            this.transductiveMetrics.next(metrics);
+        });
+
+        this._getGenericMetricsByType(MLModelType.Inductive).subscribe((metrics: number[]) => {
+            this.inductiveMetrics.next(metrics);
+        });
+
+        this._getSpecialMetricsByType(MLModelType.Transductive)
+            .subscribe(metrics => {
+                this.transductiveSpecialMetrics.next(metrics);
+            });
+
+        this._getSpecialMetricsByType(MLModelType.Inductive)
+            .subscribe(metrics => {
+                this.inductiveSpecialMetrics.next(metrics);
+            });
+
+        this._getLossResultsByType(MLModelType.Transductive)
+            .subscribe(loss_results => {
+                this.transductiveTrainLoss.next(loss_results.train_loss);
+                this.transductiveValLoss.next(loss_results.val_loss);
+            });
+
+        this._getLossResultsByType(MLModelType.Inductive)
+            .subscribe(loss_results => {
+                this.inductiveTrainLoss.next(loss_results.train_loss);
+                this.inductiveValLoss.next(loss_results.val_loss);
+            });
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Private methods
+    // -----------------------------------------------------------------------------------------------------
+
+    private _getGenericMetricsByType(modelType: MLModelType): Observable<number[]> {
+
+        return this.analysisService.getEvaluationMetrics(modelType)
+            .pipe(
+                map((metrics: EvaluationMetrics) => {
+
+                    const { loss, auc, precision, recall, f1 } = metrics;
+
+                    const genericMetrics = Object.fromEntries(
+                        // Order is important because match with the graph.
+                        Object.entries({ auc, precision, recall, f1, loss })
+                            .map(([key, value]) => [
+                                key,
+                                Number((value * 100).toFixed(2))
+                            ])
+                    );
+
+                    return Object.values(genericMetrics) // get only values in order.
+                })
+            );
+
+    }
+
+    private _getSpecialMetricsByType(modelType: MLModelType): Observable<EvaluationMetrics> {
+
+        return this.analysisService.getEvaluationMetrics(modelType)
+            .pipe(
+                map((metrics: EvaluationMetrics) => {
+
+                    const { loss, auc, precision, recall, f1, fdr, nrc, far } = metrics;
+                    const source = { loss, auc, precision, recall, f1, fdr, nrc, far };
+
+                    // Map entries and convert to percentages with 2 decimals
+                    const entries = Object.entries(source).map(([key, value]) => [
+                        key,
+                        Number((value * 100).toFixed(2))
+                    ]);
+
+                    // Reconstruct and cast to the interface
+                    return Object.fromEntries(entries) as unknown as EvaluationMetrics;
+                })
+            );
+
+    }
+
+    private _getLossResultsByType(modelType: MLModelType): Observable<LossResultsResponse> {
+
+        return this.analysisService.getLossResults(modelType)
+            .pipe(
+                map((loss_results: LossResultsResponse) => {
+
+                    const formatLoss = (list: LossResults[]) =>
+                        list.map(item => ({
+                            ...item,
+                            value: Number(item.value.toFixed(2))
+                        }));
+
+
+                    return {
+                        train_loss: formatLoss(loss_results.train_loss),
+                        val_loss: formatLoss(loss_results.val_loss)
+                    };
+
+                })
+            );
+
+    }
+
+    private _setup_radar_chart(currentSeries: { name: string, data: number[] }) {
 
         this.chartModelEvaluation = {
             chart: {
@@ -124,53 +299,86 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
                 position: 'bottom'
             }
         };
+    }
 
-        // Attach SVG fill fixer to all ApexCharts
-        window['Apex'] = {
+    private _set_up_loss_chart(chartLabels: string[], chartSeries: any) {
+
+        this.chartTrainValLoss = {
             chart: {
-                events: {
-                    mounted: (chart: any, options?: any): void => {
-                        this._fixSvgFill(chart.el);
+                fontFamily: 'inherit',
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                toolbar: {
+                    show: false,
+                },
+                zoom: {
+                    enabled: false,
+                },
+            },
+            colors: ['#166534', '#EEF2FF'],
+            dataLabels: {
+                enabled: true,
+                enabledOnSeries: [0],
+                background: {
+                    borderWidth: 0,
+                },
+            },
+            grid: {
+                borderColor: 'var(--fuse-border)',
+            },
+
+            labels: chartLabels,
+            series: chartSeries,
+
+            legend: {
+                show: false,
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%',
+                },
+            },
+            states: {
+                hover: {
+                    filter: {
+                        type: 'darken',
                     },
-                    updated: (chart: any, options?: any): void => {
-                        this._fixSvgFill(chart.el);
+                },
+            },
+            stroke: {
+                width: [3, 0],
+            },
+            tooltip: {
+                followCursor: true,
+                theme: 'dark',
+            },
+            xaxis: {
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    color: 'var(--fuse-border)',
+                },
+                labels: {
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+                tooltip: {
+                    enabled: false,
+                },
+            },
+            yaxis: {
+                labels: {
+                    offsetX: -16,
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
                     },
                 },
             },
         };
-    }
 
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Private methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Fix the SVG fill references. This fix must be applied to all ApexCharts
-     * charts in order to fix 'black color on gradient fills on certain browsers'
-     * issue caused by the '<base>' tag.
-     *
-     * Fix based on https://gist.github.com/Kamshak/c84cdc175209d1a30f711abd6a81d472
-     *
-     * @param element
-     * @private
-     */
-    private _fixSvgFill(element: Element): void {
-        // Current URL
-        const currentURL = this._router.url;
-
-        // 1. Find all elements with 'fill' attribute within the element
-        // 2. Filter out the ones that doesn't have cross reference so we only left with the ones that use the 'url(#id)' syntax
-        // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
-        Array.from(element.querySelectorAll('*[fill]'))
-            .filter((el) => el.getAttribute('fill').indexOf('url(') !== -1)
-            .forEach((el) => {
-                const attrVal = el.getAttribute('fill');
-                el.setAttribute(
-                    'fill',
-                    `url(${currentURL}${attrVal.slice(attrVal.indexOf('#'))}`
-                );
-            });
     }
 
 }

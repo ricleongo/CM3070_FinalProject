@@ -6,6 +6,8 @@ from src.app.schemas.network_risk import RiskScore
 from src.app.schemas.network_laundering import LaunderingScore
 from src.app.schemas.cluster_analysis import ClusterAnalysisScore
 from src.app.schemas.network_subgraph import SubGraphNode, SubGraphEdge
+from src.app.services.model_type_enum import ModelType
+from src.app.schemas.loss_results import LossResults
 
 class TransductiveScoringService:
 
@@ -241,6 +243,36 @@ class TransductiveScoringService:
             "edges": edge_list
         }    
 
+
+    def get_model_confusion_matrix(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        return elliptic_snapshot.get_confusion_matrix_by_model_type(model_type = ModelType.Transductive)
+        
+    def get_model_evaluation_results(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        return elliptic_snapshot.get_evaluation_by_model_type(model_type = ModelType.Transductive)
+
+    def get_model_train_validation_results(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        train_results = elliptic_snapshot.get_train_by_model_type(model_type = ModelType.Transductive)
+        val_results = elliptic_snapshot.get_validation_by_model_type(model_type = ModelType.Transductive)
+ 
+        return {
+            "train_results": train_results,
+            "val_results": val_results
+        }
 
     def _get_network_predictions(self, elliptic_snapshot):
         # Collect Elliptic Snapshot generated in training step.

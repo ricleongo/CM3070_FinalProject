@@ -165,6 +165,24 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         if precision + recall > 0:
             results['f1'] = float(2 * precision * recall / (precision + recall + 1e-8))
 
+        if self.confusion_matrix_results is not None:
+            tn = self.confusion_matrix_results["TN"]
+            fp = self.confusion_matrix_results["FP"]
+            fn = self.confusion_matrix_results["FN"]
+            tp = self.confusion_matrix_results["TP"]
+
+            # Adding Fraud Detection Rate
+            results['fdr'] = tp / (tp + fn)
+
+            # Adding Network Risk Coverage
+            results['nrc'] = (tp + fp) / (tp + fp + fn + tn)
+
+        # Adding False Alert Rate
+        if precision is not None:
+            results['far'] = 1 - float(precision)
+
+        self.evaluation_metrics = results
+
         return results
     
     @abstractmethod
@@ -175,6 +193,9 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
     def save_model(self):
         pass
 
+    def get_evaluation_metrics(self):
+        return self.evaluation_metrics
+    
     def get_train_history(self):
         return self.train_loss_history
     

@@ -5,22 +5,34 @@
             <!-- Tabs -->
             <mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
                 <!-- Model Training -->
-                <mat-tab label="MD-GCN Evaluation">
+                <mat-tab label="MD-GCN Metrics">
                     <ng-template matTabContent>
                         <div class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-6">
                             <!-- Model Evaluation Chart -->
                             <div
                                 class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-3 lg:col-span-4">
-                                <div
-                                    class="truncate text-lg font-medium leading-6 tracking-tight flex items-center gap-2">
-                                    MD-GCN Model Analysis (
-                                    Transductive <span class="inline-block w-6 h-1.5 mb-1 bg-[#6366F1]"></span>
-                                    vs
-                                    Inductive <span class="inline-block w-6 h-1.5 mb-1 bg-[#22D3EE]"></span>
-                                    )
+                                <div class="ml-0 mr-0 mt-2 flex items-center justify-between sm:mr-0">
+                                    <div class="flex flex-col">
+                                        <div class="mr-4 text-2xl font-semibold leading-7 tracking-tight md:text-3xl">
+                                            Evaluation Analysis
+                                        </div>
+                                    </div>
+                                    <div class="ml-2">
+                                        <mat-button-toggle-group class="hidden space-x-1 border-none sm:inline-flex"
+                                            [value]="modelType | async" (change)="modelType.next($event.value)">
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="0">Transductive Model
+                                            </mat-button-toggle>
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="1">Inductive Model
+                                            </mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
                                 </div>
                                 <div class="flex flex-auto flex-col">
-                                    <apx-chart class="h-[450px] w-full flex-auto" [chart]="chartModelEvaluation.chart"
+                                    <apx-chart class="h-[350px] w-full flex-auto" [chart]="chartModelEvaluation.chart"
                                         [colors]="
                                             chartModelEvaluation.colors
                                         " [dataLabels]="
@@ -42,7 +54,7 @@
 
                             <!-- AML Measures -->
                             <div class="grid grid-cols-1 gap-y-6 sm:col-span-3 lg:col-span-2">
-                                
+
                                 <!-- Fraud Detected Rate -->
                                 <div
                                     class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-2">
@@ -54,7 +66,7 @@
                                     <div class="mt-1 flex items-center">
                                         <div class="flex flex-col">
                                             <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
-                                                61.1%
+                                                {{ (currentSpecialMetrics | async)?.fdr }}%
                                             </div>
                                             <div class="flex items-center">
                                                 <mat-icon class="mr-1 text-green-500 icon-size-5" [svgIcon]="
@@ -99,7 +111,7 @@
                                     <div class="mt-1 flex items-center">
                                         <div class="flex flex-col">
                                             <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
-                                                12.4 %
+                                                {{ (currentSpecialMetrics | async)?.far }} %
                                             </div>
                                             <div class="flex items-center">
                                                 <mat-icon class="mr-1 text-red-500 icon-size-5" [svgIcon]="
@@ -144,7 +156,7 @@
                                     <div class="mt-1 flex items-center">
                                         <div class="flex flex-col">
                                             <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
-                                                18.7 %
+                                                {{ (currentSpecialMetrics | async)?.nrc }} %
                                             </div>
                                             <div class="flex items-center">
                                                 <mat-icon class="mr-1 text-red-500 icon-size-5" [svgIcon]="
@@ -178,10 +190,69 @@
                                 </div>
                             </div>
 
+                            <!-- Training and Validation Chart-->
+                             {{this.lossLabels | async | json}}
+                            <div
+                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-3 lg:col-span-6">
+                                <div class="ml-0 mr-0 mt-2 flex items-center justify-between sm:mr-0">
+                                    <div class="flex flex-col">
+                                        <div class="mr-4 text-2xl font-semibold leading-7 tracking-tight md:text-3xl">
+                                            Training vs. Validation Loss
+                                        </div>
+                                    </div>
+                                    <div class="ml-2">
+                                        <mat-button-toggle-group class="hidden space-x-1 border-none sm:inline-flex"
+                                            [value]="modelType | async" (change)="modelType.next($event.value)">
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="0">Transductive Model
+                                            </mat-button-toggle>
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="1">Inductive Model
+                                            </mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                </div>
+                                <div class="flex flex-auto flex-col">
+                                    <apx-chart class="h-80 w-full flex-auto" [chart]="
+                                            chartTrainValLoss.chart
+                                        " [colors]="
+                                            chartTrainValLoss.colors
+                                        " [dataLabels]="
+                                            chartTrainValLoss.dataLabels
+                                        " [grid]="chartTrainValLoss.grid" [labels]="
+                                            chartTrainValLoss.labels
+                                        " [legend]="
+                                            chartTrainValLoss.legend
+                                        " [plotOptions]="
+                                            chartTrainValLoss.plotOptions
+                                        " [series]="
+                                            chartTrainValLoss.series
+                                        " [states]="
+                                            chartTrainValLoss.states
+                                        " [stroke]="
+                                            chartTrainValLoss.stroke
+                                        " [tooltip]="
+                                            chartTrainValLoss.tooltip
+                                        " [xaxis]="
+                                            chartTrainValLoss.xaxis
+                                        " [yaxis]="
+                                            chartTrainValLoss.yaxis
+                                        "></apx-chart>
+                                </div>
+                            </div>
 
                         </div>
                     </ng-template>
                 </mat-tab>
+
+                <mat-tab label="Anti Money Laundering (AML) Analysis">
+                    <ng-template matTabContent>
+                        <div class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-6"></div>
+                    </ng-template>
+                </mat-tab>
+
             </mat-tab-group>
         </div>
     </div>

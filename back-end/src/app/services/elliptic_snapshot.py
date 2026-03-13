@@ -4,11 +4,13 @@ import json
 
 from scipy import sparse
 
+from src.app.services.model_type_enum import ModelType
 
 class EllipticSnapshotSingleton:
 
     _instance = None
     _initialized = False
+    _hops = 2
 
     def __new__(cls, *args):
 
@@ -22,28 +24,39 @@ class EllipticSnapshotSingleton:
         if self._initialized:
             return
 
+        # Load Node Features from File.
         self.node_features = np.load(f"{snapshot_dir}/node_features.npy")
 
+        # Load Adjacent Transactions from Files.
         self.adjacent_hops = []
 
-        self.adjacent_hops.append(
-            sparse.load_npz(f"{snapshot_dir}/adjacent_hop_0.npz")
-        )
+        for hop in range(self._hops):
+            self.adjacent_hops.append(
+                sparse.load_npz(f"{snapshot_dir}/adjacent_hop_{hop}.npz")
+            )
 
-        self.adjacent_hops.append(
-            sparse.load_npz(f"{snapshot_dir}/adjacent_hop_1.npz")
-        )
+        # Load Transactions by index from File.
+        self.transaction_to_index = self._load_data_from_file(f"{snapshot_dir}/transaction_to_index.json")
 
-        self.adjacent_hops.append(
-            sparse.load_npz(f"{snapshot_dir}/adjacent_hop_2.npz") 
-        )
+        self.index_to_transaction = {
+            index: transaction for transaction, index in self.transaction_to_index.items()
+        }
+        
+        # Load Confusion Matrix from file.
+        self.transductive_confusion_matrix = self._load_data_from_file(f"{snapshot_dir}/transductive_confusion_matrix.json")
+        self.inductive_confusion_matrix = self._load_data_from_file(f"{snapshot_dir}/inductive_confusion_matrix.json")
 
-        with open(f"{snapshot_dir}/transaction_to_index.json") as f:
-            self.transaction_to_index = json.load(f)
+        # Load Evaluation Results from File.
+        self.transductive_evaluation_results = self._load_data_from_file(f"{snapshot_dir}/transductive_evaluation_result.json")
+        self.inductive_evaluation_results = self._load_data_from_file(f"{snapshot_dir}/inductive_evaluation_result.json")
 
-            self.index_to_transaction = {
-                index: transaction for transaction, index in self.transaction_to_index.items()
-            }
+        # Load Train Results from File.
+        self.transductive_train_results = self._load_data_from_file(f"{snapshot_dir}/transductive_train_result.json")
+        self.inductive_train_results = self._load_data_from_file(f"{snapshot_dir}/inductive_train_result.json")
+
+        # Load Validation Results from File.
+        self.transductive_val_results = self._load_data_from_file(f"{snapshot_dir}/transductive_val_result.json")
+        self.inductive_val_results = self._load_data_from_file(f"{snapshot_dir}/inductive_val_result.json")
 
         self._initialized = True
 
@@ -65,6 +78,18 @@ class EllipticSnapshotSingleton:
     def get_scipy_sparce_adjacent_hops(self):
         return self.adjacent_hops
     
+    def get_confusion_matrix_by_model_type(self, model_type: ModelType = ModelType.Transductive):
+        return self.transductive_confusion_matrix if model_type == ModelType.Transductive else self.inductive_confusion_matrix
+
+    def get_evaluation_by_model_type(self, model_type: ModelType = ModelType.Transductive):
+        return self.transductive_evaluation_results if model_type == ModelType.Transductive else self.inductive_evaluation_results
+
+    def get_train_by_model_type(self, model_type: ModelType = ModelType.Transductive):
+        return self.transductive_train_results if model_type == ModelType.Transductive else self.inductive_train_results
+
+    def get_validation_by_model_type(self, model_type: ModelType = ModelType.Transductive):
+        return self.transductive_val_results if model_type == ModelType.Transductive else self.inductive_val_results
+
     def _scipy_to_tf_sparse(self, matrix):
 
         # Convert Sparse Matrix into a Coordinate format.
@@ -75,4 +100,18 @@ class EllipticSnapshotSingleton:
         shape = coo.shape
 
         return tf.sparse.SparseTensor(indices, values, shape)
+
+    def _load_data_from_file(self, file_root):
+
+        # f"{snapshot_dir}/transaction_to_index.json"
+        # self.transaction_to_index = json.load(f)
+        # self.index_to_transaction = {
+        #     index: transaction for transaction, index in self.transaction_to_index.items()
+        # }
+
+        with open(file_root) as f:
+            data_from_file = json.load(f)
+
+        return data_from_file if data_from_file is not None else {}
+
     
