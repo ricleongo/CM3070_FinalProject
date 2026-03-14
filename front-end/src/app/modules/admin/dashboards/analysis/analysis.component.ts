@@ -14,9 +14,10 @@ import { Router } from "@angular/router";
 import { AnalysisService } from './analysis.service';
 import { MLModelType } from "./model_type.enum";
 import { EvaluationMetrics } from "./evaluation_metrics.type";
-import { AsyncPipe, JsonPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { LossResults, LossResultsResponse } from "./loss_results.type";
 import { BarSeries, LineSeries } from "./series_type";
+import { MetricsType } from "./metrics_type.enum";
 
 @Component({
     selector: 'model-analysis',
@@ -25,7 +26,6 @@ import { BarSeries, LineSeries } from "./series_type";
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         AsyncPipe,
-        JsonPipe,
         MatIconModule,
         MatButtonModule,
         MatRippleModule,
@@ -86,11 +86,27 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
             this.transductiveSpecialMetrics,
             this.inductiveSpecialMetrics
         ]).subscribe(([modelType, transductiveMetrics, inductiveMetrics]) => {
-            if (modelType == MLModelType.Transductive) {
-                this.currentSpecialMetrics.next(transductiveMetrics);
-            } else {
-                this.currentSpecialMetrics.next(inductiveMetrics);
-            }
+            const metrics = (modelType == MLModelType.Transductive) ? transductiveMetrics : inductiveMetrics
+
+            const aditionalInfo = Object.fromEntries(
+                // Order is important because match with the graph.
+                Object.entries(metrics)
+                    .map(([key, value]) => [
+                        key,
+                        this.analysisService.getBenchmark(MetricsType[key.toUpperCase()], (value / 100))
+                    ])
+            );
+
+            const mergedMetrics = Object.keys(metrics).reduce((acc, key) => {
+                acc[key] = {
+                    value: metrics[key],
+                    ...aditionalInfo[key]
+                };
+                return acc;
+            }, {} as any);
+
+
+            this.currentSpecialMetrics.next(mergedMetrics);
         });
 
         combineLatest([
@@ -102,24 +118,24 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
         ]).subscribe(([modelType, transductiveTrainLoss, transductiveValLoss, inductiveTrainLoss, inductiveValLoss]) => {
 
             if (modelType == MLModelType.Transductive) {
-                const lossLabels = transductiveTrainLoss.map(item => item.epoch);
+                const lossLabels = transductiveTrainLoss?.map(item => item.epoch);
 
                 const lossTrainSeries =
-                    new LineSeries("Train Loss", transductiveTrainLoss.map(item => item.value));
+                    new LineSeries("Train Loss", transductiveTrainLoss?.map(item => item.value));
 
                 const lossValSeries =
-                    new BarSeries("Validation Loss", transductiveValLoss.map(item => item.value));
+                    new BarSeries("Validation Loss", transductiveValLoss?.map(item => item.value));
 
                 this._set_up_loss_chart(lossLabels, [lossTrainSeries, lossValSeries]);
 
             } else {
-                const lossLabels = inductiveTrainLoss.map(item => item.epoch);
+                const lossLabels = inductiveTrainLoss?.map(item => item.epoch);
 
                 const lossTrainSeries =
-                    new LineSeries("Train Loss", inductiveTrainLoss.map(item => item.value));
+                    new LineSeries("Train Loss", inductiveTrainLoss?.map(item => item.value));
 
                 const lossValSeries =
-                    new BarSeries("Validation Loss", inductiveValLoss.map(item => item.value));
+                    new BarSeries("Validation Loss", inductiveValLoss?.map(item => item.value));
 
                 this._set_up_loss_chart(lossLabels, [lossTrainSeries, lossValSeries]);
             }
@@ -133,6 +149,7 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
         this._getGenericMetricsByType(MLModelType.Inductive).subscribe((metrics: number[]) => {
             this.inductiveMetrics.next(metrics);
         });
+
 
         this._getSpecialMetricsByType(MLModelType.Transductive)
             .subscribe(metrics => {
@@ -192,7 +209,7 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
                 map((metrics: EvaluationMetrics) => {
 
                     const { loss, auc, precision, recall, f1, fdr, nrc, far } = metrics;
-                    const source = { loss, auc, precision, recall, f1, fdr, nrc, far };
+                    const source = { fdr, nrc, far };
 
                     // Map entries and convert to percentages with 2 decimals
                     const entries = Object.entries(source).map(([key, value]) => [

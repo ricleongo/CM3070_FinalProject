@@ -66,35 +66,15 @@
                                     <div class="mt-1 flex items-center">
                                         <div class="flex flex-col">
                                             <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
-                                                {{ (currentSpecialMetrics | async)?.fdr }}%
+                                                {{ (currentSpecialMetrics | async)?.fdr?.value }}%
                                             </div>
                                             <div class="flex items-center">
-                                                <mat-icon class="mr-1 text-green-500 icon-size-5" [svgIcon]="
-                                                        'heroicons_solid:arrow-trending-down'
-                                                    "></mat-icon>
                                                 <div
                                                     class="text-secondary whitespace-nowrap text-sm font-medium leading-none">
-                                                    <span class="text-green-500">2%</span>
-                                                    below projected
+                                                    <span [style.color]="(currentSpecialMetrics | async)?.fdr?.color">{{ (currentSpecialMetrics | async)?.fdr?.label }}</span>
+                                                    {{ (currentSpecialMetrics | async)?.fdr?.description }}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="ml-8 flex flex-auto flex-col">
-                                            <!-- <apx-chart class="h-16 w-full flex-auto" [chart]="
-                                                    chartWeeklyExpenses.chart
-                                                " [colors]="
-                                                    chartWeeklyExpenses.colors
-                                                " [series]="
-                                                    chartWeeklyExpenses.series
-                                                " [stroke]="
-                                                    chartWeeklyExpenses.stroke
-                                                " [tooltip]="
-                                                    chartWeeklyExpenses.tooltip
-                                                " [xaxis]="
-                                                    chartWeeklyExpenses.xaxis
-                                                " [yaxis]="
-                                                    chartWeeklyExpenses.yaxis
-                                                "></apx-chart> -->
                                         </div>
                                     </div>
                                 </div>
@@ -111,35 +91,15 @@
                                     <div class="mt-1 flex items-center">
                                         <div class="flex flex-col">
                                             <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
-                                                {{ (currentSpecialMetrics | async)?.far }} %
+                                                {{ (currentSpecialMetrics | async)?.far?.value }} %
                                             </div>
                                             <div class="flex items-center">
-                                                <mat-icon class="mr-1 text-red-500 icon-size-5" [svgIcon]="
-                                                        'heroicons_solid:arrow-trending-up'
-                                                    "></mat-icon>
                                                 <div
                                                     class="text-secondary whitespace-nowrap text-sm font-medium leading-none">
-                                                    <span class="text-red-500">4%</span>
-                                                    above projected
+                                                    <span [style.color]="(currentSpecialMetrics | async)?.far?.color">{{ (currentSpecialMetrics | async)?.far?.label }}</span>
+                                                    {{ (currentSpecialMetrics | async)?.far?.description }}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="ml-8 flex flex-auto flex-col">
-                                            <!-- <apx-chart class="h-16 w-full flex-auto" [chart]="
-                                                    chartMonthlyExpenses.chart
-                                                " [colors]="
-                                                    chartMonthlyExpenses.colors
-                                                " [series]="
-                                                    chartMonthlyExpenses.series
-                                                " [stroke]="
-                                                    chartMonthlyExpenses.stroke
-                                                " [tooltip]="
-                                                    chartMonthlyExpenses.tooltip
-                                                " [xaxis]="
-                                                    chartMonthlyExpenses.xaxis
-                                                " [yaxis]="
-                                                    chartMonthlyExpenses.yaxis
-                                                "></apx-chart> -->
                                         </div>
                                     </div>
                                 </div>
@@ -156,42 +116,21 @@
                                     <div class="mt-1 flex items-center">
                                         <div class="flex flex-col">
                                             <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
-                                                {{ (currentSpecialMetrics | async)?.nrc }} %
+                                                {{ (currentSpecialMetrics | async)?.nrc?.value }} %
                                             </div>
                                             <div class="flex items-center">
-                                                <mat-icon class="mr-1 text-red-500 icon-size-5" [svgIcon]="
-                                                        'heroicons_solid:arrow-trending-up'
-                                                    "></mat-icon>
                                                 <div
                                                     class="text-secondary whitespace-nowrap text-sm font-medium leading-none">
-                                                    <span class="text-red-500">3%</span>
-                                                    above projected
+                                                    <span [style.color]="(currentSpecialMetrics | async)?.nrc?.color">{{ (currentSpecialMetrics | async)?.nrc?.label }}</span>
+                                                    {{ (currentSpecialMetrics | async)?.nrc?.description }}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="ml-8 flex flex-auto flex-col">
-                                            <!-- <apx-chart class="h-16 w-full flex-auto" [chart]="
-                                                    chartYearlyExpenses.chart
-                                                " [colors]="
-                                                    chartYearlyExpenses.colors
-                                                " [series]="
-                                                    chartYearlyExpenses.series
-                                                " [stroke]="
-                                                    chartYearlyExpenses.stroke
-                                                " [tooltip]="
-                                                    chartYearlyExpenses.tooltip
-                                                " [xaxis]="
-                                                    chartYearlyExpenses.xaxis
-                                                " [yaxis]="
-                                                    chartYearlyExpenses.yaxis
-                                                "></apx-chart> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Training and Validation Chart-->
-                             {{this.lossLabels | async | json}}
                             <div
                                 class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-3 lg:col-span-6">
                                 <div class="ml-0 mr-0 mt-2 flex items-center justify-between sm:mr-0">

@@ -10,7 +10,7 @@ class EllipticSnapshotSingleton:
 
     _instance = None
     _initialized = False
-    _hops = 2
+    _hops = 3
 
     def __new__(cls, *args):
 

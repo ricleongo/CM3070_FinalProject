@@ -203,9 +203,6 @@ class TransductiveScoringService:
         edges = []
         new_neighbors = []
 
-        print('transaction_indices:', transaction_indices)
-
-
         for node_index in transaction_indices:
 
             neighbors = [int(n) for n in adjacency.getrow(node_index).indices]
