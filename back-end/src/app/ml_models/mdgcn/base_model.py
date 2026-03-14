@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
+
 import tensorflow as tf
+
+from sklearn.metrics import confusion_matrix
+
 
 @tf.keras.utils.register_keras_serializable()
 class BaseSupervisedModel(tf.keras.Model, ABC):
@@ -64,7 +68,10 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
     def fit(self, node_features, adjacent_list, labels, train_mask,
             val_data=None, epochs=100, verbose=1):
 
-        for epoch in range(epochs):
+        self.train_loss_history = []
+        self.validation_loss_history = []
+
+        for epoch in range(epochs + 1):
 
             # ----- Training step -----
             train_loss = self.train_step(((node_features, adjacent_list, train_mask), labels))
@@ -79,11 +86,25 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
                     ((val_node_features, val_adjacent_list, val_mask), val_labels)
                 )
 
-            if verbose and epoch % 10 == 0:
-                print(f"Epoch {epoch}")
-                print("Train Loss:", float(train_loss))
-                if val_loss is not None:
-                    print("Val Loss:", float(val_loss))
+            if (epoch % 10 == 0 or epochs - epoch == 0):
+
+                self.train_loss_history.append({
+                    "name": f"epoch-{epoch}",
+                    "value": float(train_loss.numpy())
+                })
+
+                self.validation_loss_history.append({
+                    "name":  f"epoch-{epoch}",
+                    "value": float(val_loss.numpy()) if val_loss is not None else 0.0
+                })
+
+                if verbose:
+                    print(f"Epoch {epoch}")
+                    print("Train Loss:", float(train_loss))
+
+                    if val_loss is not None:
+                        print("Val Loss:", float(val_loss))
+
 
         self.save_model()
 
@@ -109,6 +130,9 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
 
         # Apply threshold
         y_pred_binary = tf.cast(y_pred > threshold, y_true.dtype)
+
+        # Setup Confusion Matrix Results
+        self.set_confusion_matrix(y_true, y_pred_binary)
 
         for metric in self.metrics:
             metric.reset_state()
@@ -141,6 +165,24 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         if precision + recall > 0:
             results['f1'] = float(2 * precision * recall / (precision + recall + 1e-8))
 
+        if self.confusion_matrix_results is not None:
+            tn = self.confusion_matrix_results["TN"]
+            fp = self.confusion_matrix_results["FP"]
+            fn = self.confusion_matrix_results["FN"]
+            tp = self.confusion_matrix_results["TP"]
+
+            # Adding Fraud Detection Rate
+            results['fdr'] = tp / (tp + fn)
+
+            # Adding Network Risk Coverage
+            results['nrc'] = (tp + fp) / (tp + fp + fn + tn)
+
+        # Adding False Alert Rate
+        if precision is not None:
+            results['far'] = 1 - float(precision)
+
+        self.evaluation_metrics = results
+
         return results
     
     @abstractmethod
@@ -150,6 +192,33 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
     @abstractmethod
     def save_model(self):
         pass
+
+    def get_evaluation_metrics(self):
+        return self.evaluation_metrics
+    
+    def get_train_history(self):
+        return self.train_loss_history
+    
+    def get_validation_history(self):
+        return self.validation_loss_history
+
+    def get_confusion_matrix_results(self):
+        return self.confusion_matrix_results
+
+    def set_confusion_matrix(self, y_true, y_pred):
+
+        tn, fp, fn, tp = confusion_matrix(
+            y_true.numpy(),
+            y_pred.numpy()
+        ).ravel()
+
+        # Create dictionary
+        self.confusion_matrix_results = {
+            "TN": int(tn),
+            "FP": int(fp), 
+            "FN": int(fn), 
+            "TP": int(tp)
+        }
 
     def compute_loss(self, labels, predicted, mask):
         """Calculating Loss using normal Binary Cross Entropy function"""
@@ -163,7 +232,7 @@ class BaseSupervisedModel(tf.keras.Model, ABC):
         loss = loss * mask
         
         return tf.reduce_sum(loss) / (tf.reduce_sum(mask) + 1e-8)
-
+    
     def compute_loss_with_weights(self, labels, predicted, mask, weights):
         """Calculating Loss using weighted Binary Cross Entropy manual calculation"""
 

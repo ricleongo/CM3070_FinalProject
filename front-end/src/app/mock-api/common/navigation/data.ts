@@ -7,21 +7,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         title: 'Dashboard',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/dashboards/analysis'
     },
     {
         id   : 'transfer',
         title: 'Transfer',
         type : 'basic',
         icon : 'heroicons_outline:arrow-right-on-rectangle',
-        link : '/example'
+        link : '/transfer'
     },
     {
         id   : 'wallet',
         title: 'Crypto Wallet',
         type : 'basic',
         icon : 'heroicons_outline:wallet',
-        link : '/example'
+        link : '/wallet'
     },
     {
         id   : 'contributor',

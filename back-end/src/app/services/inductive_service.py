@@ -5,6 +5,7 @@ from scipy import sparse
 
 from src.app.schemas.realtime_scoring import RealtimeScoring
 from src.app.schemas.simulate_attack import SimulationScore
+from src.app.services.model_type_enum import ModelType
 
 class InductiveScoringService:
 
@@ -54,7 +55,6 @@ class InductiveScoringService:
             risk_level = ''
         )
     
-
     def simulate_attack(self, transaction_features, connected_transactions):
 
         from src.app.main import elliptic_snapshot
@@ -100,7 +100,36 @@ class InductiveScoringService:
         return SimulationScore(
             fraud_probability = float(prediction.numpy()[simulated_node_index])
         )
-    
+
+    def get_model_confusion_matrix(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        return elliptic_snapshot.get_confusion_matrix_by_model_type(model_type = ModelType.Inductive)
+        
+    def get_model_evaluation_results(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        return elliptic_snapshot.get_evaluation_by_model_type(model_type = ModelType.Inductive)
+
+    def get_model_train_validation_results(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        train_results = elliptic_snapshot.get_train_by_model_type(model_type = ModelType.Inductive)
+        val_results = elliptic_snapshot.get_validation_by_model_type(model_type = ModelType.Inductive)
+
+        return {
+            "train_results": train_results,
+            "val_results": val_results
+        }
 
     def _extract_local_neighborhood(self, transaction_index, adjacency_list, hop_depth=2):
 

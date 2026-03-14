@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedTransductiveModel.load_model()
 service = TransductiveScoringService(model)
 
-@router.post("/network/risk", response_model=NetworkRiskResponse)
+@router.post("/transductive/network/risk", response_model=NetworkRiskResponse)
 def detect_network_risk(request: NetworkRiskRequest):
     """
         Evaluate risk propagation across the graph.

@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedInductiveModel.load_model()
 service = InductiveScoringService(model)
 
-@router.post("/fraud/realtime-scoring", response_model=RealtimeScoringResponse)
+@router.post("/inductive/realtime-scoring", response_model=RealtimeScoringResponse)
 def detect_live_anomaly(request: RealtimeScoringRequest):
 
     score = service.score_realtime_transaction(

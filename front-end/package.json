@@ -7,10 +7,11 @@
     "private": true,
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
+        "start": "ng serve --proxy-config proxy.conf.json --open",
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
-        "test": "ng test"
+        "test": "ng test",
+        "init-project": "npm i && npm run build && npm run start"
     },
     "dependencies": {
         "@angular/animations": "19.0.5",
@@ -27,6 +28,8 @@
         "@jsverse/transloco": "7.5.1",
         "apexcharts": "4.3.0",
         "crypto-js": "4.2.0",
+        "cytoscape": "3.33.1",
+        "cytoscape-cose-bilkent": "4.1.0",
         "highlight.js": "11.11.1",
         "lodash-es": "4.17.21",
         "luxon": "3.5.0",

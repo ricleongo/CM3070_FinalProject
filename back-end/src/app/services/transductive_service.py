@@ -6,6 +6,8 @@ from src.app.schemas.network_risk import RiskScore
 from src.app.schemas.network_laundering import LaunderingScore
 from src.app.schemas.cluster_analysis import ClusterAnalysisScore
 from src.app.schemas.network_subgraph import SubGraphNode, SubGraphEdge
+from src.app.services.model_type_enum import ModelType
+from src.app.schemas.loss_results import LossResults
 
 class TransductiveScoringService:
 
@@ -27,7 +29,7 @@ class TransductiveScoringService:
 
         return [
             TransactionScore(
-                transaction_index = index, 
+                transaction_id = elliptic_snapshot.get_transaction_by_index(index), 
                 fraud_probability=float(score)
             )
             for index, score in enumerate(predictions)
@@ -146,15 +148,16 @@ class TransductiveScoringService:
         for cluster_index, cluster in enumerate(clusters):
 
             cluster_nodes = list(cluster)
+            cluster_transaction_ids = [elliptic_snapshot.get_transaction_by_index(node_index) for node_index in cluster_nodes]
 
             cluster_scores = predictions[cluster_nodes]
 
             results.append(LaunderingScore(
-                cluster_id = cluster_index,
+                cluster_id = elliptic_snapshot.get_transaction_by_index(cluster_index),
                 cluster_size = len(cluster_nodes),
                 mean_risk = float(cluster_scores.mean()),
                 max_risk = float(cluster_scores.max()),
-                suspicious_nodes = int((cluster_scores > risk_threshold).sum())                
+                suspicious_nodes = cluster_transaction_ids #int((cluster_scores > risk_threshold).sum())                
             ))
 
         results.sort(key=lambda x: x.mean_risk, reverse=True)
@@ -176,52 +179,60 @@ class TransductiveScoringService:
         scipy_sparce_adjacent_list = elliptic_snapshot.get_scipy_sparce_adjacent_hops()
 
         neighbors = set([transaction_index])
-
-        frontier = {transaction_index}
+        current_adjacent = { transaction_index }
 
         for hop in range(1, hop_depth + 1):
 
             adjacency = scipy_sparce_adjacent_list[hop]
 
-            next_frontier = set()
+            next_adjacent = set()
 
-            for node in frontier:
-                new_neighbors = adjacency.getrow(node).indices
-                next_frontier.update(new_neighbors)
+            for node in current_adjacent:
+                new_neighbors = [int(n) for n in adjacency.getrow(node).indices]
 
-            neighbors.update(next_frontier)
-            frontier = next_frontier
+                next_adjacent.update(new_neighbors)
 
-        nodes = list(neighbors)
+            neighbors.update(next_adjacent) # Adding on top of the stack.
+
+            current_adjacent = next_adjacent # Updating the next adjacent node.
+
+        transaction_indices = list(neighbors) # Converting from dictionary to a list.
 
         adjacency = scipy_sparce_adjacent_list[1]
 
         edges = []
+        new_neighbors = []
 
-        for node in nodes:
+        for node_index in transaction_indices:
 
-            neighbors = adjacency.getrow(node).indices
+            neighbors = [int(n) for n in adjacency.getrow(node_index).indices]
 
-            for n in neighbors:
-                if n in nodes:
-                    edges.append((node, n))
+            for neighbor in neighbors:
+                # if neighbor in transaction_indices:
+                edges.append((node_index, neighbor))
+                new_neighbors.append(neighbor)
 
-        index_to_tx = elliptic_snapshot.get_transaction_by_index
+
+        [transaction_indices.append(neighbor) for neighbor in new_neighbors]
+        transaction_indices = set(transaction_indices)
+        transaction_indices = list(transaction_indices)
+        
+        index_to_transaction_id = elliptic_snapshot.get_transaction_by_index
 
         node_list = [
             SubGraphNode(
-                transaction_id = index_to_tx(n),
-                risk = float(predictions[n])   
+                transaction_id = index_to_transaction_id(node_index),
+                risk = float(predictions[node_index])   
             )
-            for n in nodes
+            for node_index in transaction_indices
         ]
 
         edge_list = [
             SubGraphEdge(
-                source_transaction_id = index_to_tx(s),
-                target_transaction_id = index_to_tx(t)                
+                source_transaction_id = index_to_transaction_id(source),
+                target_transaction_id = index_to_transaction_id(target)                
             )
-            for s, t in edges
+            for source, target in edges
         ]
 
         return {
@@ -229,6 +240,36 @@ class TransductiveScoringService:
             "edges": edge_list
         }    
 
+
+    def get_model_confusion_matrix(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        return elliptic_snapshot.get_confusion_matrix_by_model_type(model_type = ModelType.Transductive)
+        
+    def get_model_evaluation_results(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        return elliptic_snapshot.get_evaluation_by_model_type(model_type = ModelType.Transductive)
+
+    def get_model_train_validation_results(self):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        train_results = elliptic_snapshot.get_train_by_model_type(model_type = ModelType.Transductive)
+        val_results = elliptic_snapshot.get_validation_by_model_type(model_type = ModelType.Transductive)
+ 
+        return {
+            "train_results": train_results,
+            "val_results": val_results
+        }
 
     def _get_network_predictions(self, elliptic_snapshot):
         # Collect Elliptic Snapshot generated in training step.

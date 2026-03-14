@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedTransductiveModel.load_model()
 service = TransductiveScoringService(model)
 
-@router.post("/fraud/cluster-analysis", response_model=ClusterAnalysisResponse)
+@router.post("/transductive/cluster-analysis", response_model=ClusterAnalysisResponse)
 def cluster_analysis(request: ClusterAnalysisRequest):
     """
         Analyze the entire transaction cluster around a transaction.

@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedTransductiveModel.load_model()
 service = TransductiveScoringService(model)
 
-@router.post("/network/subgraph", response_model=SubGraphResponse)
+@router.post("/transductive/network/subgraph", response_model=SubGraphResponse)
 def network_subgraph(request: SubGraphRequest):
     
     subgraph = service.extract_network_subgraph(

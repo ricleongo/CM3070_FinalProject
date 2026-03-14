@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedInductiveModel.load_model()
 service = InductiveScoringService(model)
 
-@router.post("/simulate-attack")
+@router.post("/inductive/simulate-attack")
 def simulate_attack(request: SimulateAttackRequest):
 
     score = service.simulate_attack(

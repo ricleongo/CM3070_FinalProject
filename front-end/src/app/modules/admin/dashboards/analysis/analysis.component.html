@@ -1,0 +1,198 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <!-- Main -->
+    <div class="-mt-px flex-auto border-t pt-4 sm:pt-6">
+        <div class="mx-auto w-full max-w-screen-xl">
+            <!-- Tabs -->
+            <mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
+                <!-- Model Training -->
+                <mat-tab label="MD-GCN Metrics">
+                    <ng-template matTabContent>
+                        <div class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-6">
+                            <!-- Model Evaluation Chart -->
+                            <div
+                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-3 lg:col-span-4">
+                                <div class="ml-0 mr-0 mt-2 flex items-center justify-between sm:mr-0">
+                                    <div class="flex flex-col">
+                                        <div class="mr-4 text-2xl font-semibold leading-7 tracking-tight md:text-3xl">
+                                            Evaluation Analysis
+                                        </div>
+                                    </div>
+                                    <div class="ml-2">
+                                        <mat-button-toggle-group class="hidden space-x-1 border-none sm:inline-flex"
+                                            [value]="modelType | async" (change)="modelType.next($event.value)">
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="0">Transductive Model
+                                            </mat-button-toggle>
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="1">Inductive Model
+                                            </mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                </div>
+                                <div class="flex flex-auto flex-col">
+                                    <apx-chart class="h-[350px] w-full flex-auto" [chart]="chartModelEvaluation.chart"
+                                        [colors]="
+                                            chartModelEvaluation.colors
+                                        " [dataLabels]="
+                                            chartModelEvaluation.dataLabels
+                                        " [markers]="
+                                            chartModelEvaluation.markers
+                                        " [plotOptions]="
+                                            chartModelEvaluation.plotOptions
+                                        " [series]="
+                                            chartModelEvaluation.series
+                                        " [stroke]="
+                                            chartModelEvaluation.stroke
+                                        " [tooltip]="
+                                            chartModelEvaluation.tooltip
+                                        " [xaxis]="chartModelEvaluation.xaxis"
+                                        [yaxis]="chartModelEvaluation.yaxis"></apx-chart>
+                                </div>
+                            </div>
+
+                            <!-- AML Measures -->
+                            <div class="grid grid-cols-1 gap-y-6 sm:col-span-3 lg:col-span-2">
+
+                                <!-- Fraud Detected Rate -->
+                                <div
+                                    class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-2">
+                                    <div class="flex items-start justify-between">
+                                        <div class="truncate text-lg font-medium leading-6 tracking-tight mb-4">
+                                            Fraud Detected Rate
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 flex items-center">
+                                        <div class="flex flex-col">
+                                            <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
+                                                {{ (currentSpecialMetrics | async)?.fdr?.value }}%
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div
+                                                    class="text-secondary whitespace-nowrap text-sm font-medium leading-none">
+                                                    <span [style.color]="(currentSpecialMetrics | async)?.fdr?.color">{{ (currentSpecialMetrics | async)?.fdr?.label }}</span>
+                                                    {{ (currentSpecialMetrics | async)?.fdr?.description }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- False Alert Rate -->
+                                <div
+                                    class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-2">
+                                    <div class="flex items-start justify-between">
+                                        <div class="truncate text-lg font-medium leading-6 tracking-tight mb-4">
+                                            False Alert Rate
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 flex items-center">
+                                        <div class="flex flex-col">
+                                            <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
+                                                {{ (currentSpecialMetrics | async)?.far?.value }} %
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div
+                                                    class="text-secondary whitespace-nowrap text-sm font-medium leading-none">
+                                                    <span [style.color]="(currentSpecialMetrics | async)?.far?.color">{{ (currentSpecialMetrics | async)?.far?.label }}</span>
+                                                    {{ (currentSpecialMetrics | async)?.far?.description }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Network Risk Coverage -->
+                                <div
+                                    class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-2">
+                                    <div class="flex items-start justify-between">
+                                        <div class="truncate text-lg font-medium leading-6 tracking-tight mb-4">
+                                            Network Risk Coverage
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 flex items-center">
+                                        <div class="flex flex-col">
+                                            <div class="text-3xl font-semibold leading-tight tracking-tight mb-4">
+                                                {{ (currentSpecialMetrics | async)?.nrc?.value }} %
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div
+                                                    class="text-secondary whitespace-nowrap text-sm font-medium leading-none">
+                                                    <span [style.color]="(currentSpecialMetrics | async)?.nrc?.color">{{ (currentSpecialMetrics | async)?.nrc?.label }}</span>
+                                                    {{ (currentSpecialMetrics | async)?.nrc?.description }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Training and Validation Chart-->
+                            <div
+                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow sm:col-span-3 lg:col-span-6">
+                                <div class="ml-0 mr-0 mt-2 flex items-center justify-between sm:mr-0">
+                                    <div class="flex flex-col">
+                                        <div class="mr-4 text-2xl font-semibold leading-7 tracking-tight md:text-3xl">
+                                            Training vs. Validation Loss
+                                        </div>
+                                    </div>
+                                    <div class="ml-2">
+                                        <mat-button-toggle-group class="hidden space-x-1 border-none sm:inline-flex"
+                                            [value]="modelType | async" (change)="modelType.next($event.value)">
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="0">Transductive Model
+                                            </mat-button-toggle>
+                                            <mat-button-toggle
+                                                class="overflow-hidden rounded-full border-none px-1.5 font-medium"
+                                                [value]="1">Inductive Model
+                                            </mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                </div>
+                                <div class="flex flex-auto flex-col">
+                                    <apx-chart class="h-80 w-full flex-auto" [chart]="
+                                            chartTrainValLoss.chart
+                                        " [colors]="
+                                            chartTrainValLoss.colors
+                                        " [dataLabels]="
+                                            chartTrainValLoss.dataLabels
+                                        " [grid]="chartTrainValLoss.grid" [labels]="
+                                            chartTrainValLoss.labels
+                                        " [legend]="
+                                            chartTrainValLoss.legend
+                                        " [plotOptions]="
+                                            chartTrainValLoss.plotOptions
+                                        " [series]="
+                                            chartTrainValLoss.series
+                                        " [states]="
+                                            chartTrainValLoss.states
+                                        " [stroke]="
+                                            chartTrainValLoss.stroke
+                                        " [tooltip]="
+                                            chartTrainValLoss.tooltip
+                                        " [xaxis]="
+                                            chartTrainValLoss.xaxis
+                                        " [yaxis]="
+                                            chartTrainValLoss.yaxis
+                                        "></apx-chart>
+                                </div>
+                            </div>
+
+                        </div>
+                    </ng-template>
+                </mat-tab>
+
+                <mat-tab label="Anti Money Laundering (AML) Analysis">
+                    <ng-template matTabContent>
+                        <div class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-6"></div>
+                    </ng-template>
+                </mat-tab>
+
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
