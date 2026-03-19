@@ -20,7 +20,7 @@ def cluster_analysis(request: ClusterAnalysisRequest):
             Is this transaction part of a suspicious network?
     """
 
-    scores = service.analyze_cluster(
+    scores = service.get_cluster_analysis(
         request.transaction_id,
         request.hop_depth
     )

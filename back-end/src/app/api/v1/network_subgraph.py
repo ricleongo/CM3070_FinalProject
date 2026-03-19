@@ -14,7 +14,7 @@ service = TransductiveScoringService(model)
 @router.post("/transductive/network/subgraph", response_model=SubGraphResponse)
 def network_subgraph(request: SubGraphRequest):
     
-    subgraph = service.extract_network_subgraph(
+    subgraph = service.get_network_subgraph(
         transaction_id= request.transaction_id,
         hop_depth= request.hop_depth
     )

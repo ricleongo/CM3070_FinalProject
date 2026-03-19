@@ -25,7 +25,7 @@ def find_fraud_history(request: FraudHistoryRequest):
             - identify laundering networks
     """
 
-    scores = service.score_history(
+    scores = service.get_score_history(
         request.transaction_ids
     )
 
