@@ -28,7 +28,8 @@ class SupervisedTransductiveModel(BaseSupervisedModel):
         # full MD-GCN layer trained in distance_layer method
         mdgcn_results = self.distance_layer((node_features, adjacent_list), training=training)
 
-        if mask is not None:
+        if mask is not None and mask[0] is not None:
+            
             mask = tf.cast(mask[:, None], mdgcn_results.dtype)
             
             mdgcn_results = mdgcn_results * mask

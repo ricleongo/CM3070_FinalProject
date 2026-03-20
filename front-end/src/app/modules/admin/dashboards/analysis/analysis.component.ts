@@ -18,6 +18,7 @@ import { AsyncPipe } from "@angular/common";
 import { LossResults, LossResultsResponse } from "./loss_results.type";
 import { BarSeries, LineSeries } from "./series_type";
 import { MetricsType } from "./metrics_type.enum";
+import { GraphComponent } from "../graph/graph.component";
 
 @Component({
     selector: 'model-analysis',
@@ -34,6 +35,7 @@ import { MetricsType } from "./metrics_type.enum";
         MatButtonToggleModule,
         NgApexchartsModule,
         MatTableModule,
+        GraphComponent
     ]
 })
 export class ModelAnalysisComponent implements OnInit, OnDestroy {

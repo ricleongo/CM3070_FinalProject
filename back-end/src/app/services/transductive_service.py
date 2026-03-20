@@ -17,6 +17,17 @@ class TransductiveScoringService:
     def __init__(self, model):
         self.model = model
 
+    def get_top_transaction_ids(self, top_list):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        transactions_df = pd.read_csv("data/elliptic/elliptic_txs_classes.csv")
+
+        return transactions_df["txId"].head(top_list)
+
+
     def get_score_history(self, transaction_ids):
         from src.app.main import elliptic_snapshot
 
@@ -305,7 +316,7 @@ class TransductiveScoringService:
         adjacent_list = elliptic_snapshot.get_adjacent_hops()
 
         # Fit with input sample.
-        predictions = self.model(node_features, adjacent_list, training=False)
+        predictions = self.model((node_features, adjacent_list), training=False)
 
         # Flatten results.
         return predictions.numpy().flatten()
