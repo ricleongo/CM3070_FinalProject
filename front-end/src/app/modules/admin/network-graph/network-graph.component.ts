@@ -1,7 +1,9 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, OnInit } from '@angular/core';
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import { NetworkGraphService } from './network-graph.service';
+import { GraphDashboardService } from '../dashboards/graph/graph.service';
+import { HistoryScore } from 'app/core/types/history_score.type';
 
 cytoscape.use(coseBilkent);
 
@@ -11,20 +13,24 @@ cytoscape.use(coseBilkent);
   templateUrl: './network-graph.component.html',
   styleUrl: './network-graph.component.scss'
 })
-export class NetworkGraphComponent implements AfterViewInit {
+export class NetworkGraphComponent implements OnInit {
 
   cy: any;
 
-  constructor(private networkGraphService: NetworkGraphService) {}
+  constructor(
+    private networkGraphService: NetworkGraphService,
+    private graphDashboardService: GraphDashboardService
+  ) { }
 
-  ngAfterViewInit(): void {
-    this.loadGraph();
+  ngOnInit(): void {
+    this.graphDashboardService.selectedScore.subscribe((selected: HistoryScore) => {
+      this.loadGraph(selected?.transaction_id ?? 0);
+    });
   }
 
-  
-  loadGraph() {
+  loadGraph(transactionID: number) {
 
-    this.networkGraphService.getNetworkSubgraph(16754007).subscribe((data : {subgraph: []}) => {
+    this.networkGraphService.getNetworkSubgraph(transactionID).subscribe((data: { subgraph: [] }) => {
       const elements = this.buildElements(data.subgraph);
 
       this.cy = cytoscape({

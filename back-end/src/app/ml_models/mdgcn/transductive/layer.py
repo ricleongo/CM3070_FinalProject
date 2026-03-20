@@ -14,48 +14,54 @@ class TransductiveLayer(layers.Layer):
             **kwargs):
         super().__init__(**kwargs)
         
-        self.in_dim = in_dim
-        self.out_dim = out_dim
-        self.K = K
-
-        self.dropout_rate = dropout_rate
-        self.l2_reg = l2_reg
+        self.in_dim = in_dim                # Number of input nodes for this Layer.
+        self.out_dim = out_dim              # Number of expected nodes to be output for this layer.
+        self.max_dist = K                   # Maximum hop distance.
+        self.dropout_rate = dropout_rate    # Dropout rate for inter Layer dropout.
+        self.l2_reg = l2_reg                # L2 Regularization rate.
 
         self.embed_initializer = 'glorot_uniform'
 
     ### PUBLIC FUNCTIONS ###
 
     def build(self, input_shape):
-        self._set_kernels()
+        # Setting up kernels for node_features.
+        self._setup_kernels()
 
-        # Adding dropout layer
+        # Creating dropout layer
         self.dropout = layers.Dropout(self.dropout_rate)
 
 
-    def call(self, node_features, adjacent_list, training=False):
+    def call(self, inputs, training=False):
         """ Keras Layer Forward Propagation Learning Process
         node_features: [features_length, fan_input]
         adjacent_list: list of SparseTensor adj matrices
         """
 
+        node_features, adjacent_list = inputs
+
         output = 0.0
 
-        for hop in range(self.K + 1):
+        for hop in range(self.max_dist + 1):
 
-            # 1 Linear transform
-            features_by_hop = self.kernels[hop](node_features)
+            # this is the `~A` part of the MD-GCN formula "Symmetrically normalized adjacency"
+            symetric_A = adjacent_list[hop]
+
+            # Linear transform (this is the `H^l` part of the MD-GCN formula).
+            matrix_nodes = self.kernels[hop](node_features)
             
-            # 2 Apply dropout AFTER linear projection
-            features_by_hop = self.dropout(features_by_hop, training=training)
+            # Apply dropout to Matrix of Nodes.
+            matrix_nodes = self.dropout(matrix_nodes, training=training)
 
-            # 3 Sparse spatial propagation
-            spatial_part = self._sparse_propagation(
-                adjacent_list[hop],
-                features_by_hop
+            # Sparse Mathematical multiplication on both previous results.
+            matmul_result = tf.sparse.sparse_dense_matmul(
+                symetric_A,
+                matrix_nodes
             )
 
-            output += spatial_part
+            output += matmul_result
 
+        # Applying ReLU Non-Linear Activation Function.
         output = tf.nn.relu(output)
 
         # 2nd dropout after activation
@@ -68,28 +74,19 @@ class TransductiveLayer(layers.Layer):
         config.update({
             "in_dim": self.in_dim,
             "out_dim": self.out_dim,
-            "K": self.K,
+            "K": self.max_dist,
             "dropout_rate": self.dropout_rate,
             "l2_reg": self.l2_reg
         })
 
     ### PRIVATE FUNCTIONS ###
 
-    def _set_kernels(self):
+    def _setup_kernels(self):
         self.kernels = [
             layers.Dense(
                 self.out_dim,
                 use_bias=False,
                 kernel_regularizer=tf.keras.regularizers.l2(self.l2_reg)                
             )
-            for _ in range(self.K + 1)
+            for _ in range(self.max_dist + 1)
         ]
-
-    def _sparse_propagation(self, adjacent_sparse, node_features_transformed):
-        """
-        adjacent_sparse: tf.sparse.SparseTensor [N, N]
-        node_features_transformed: [N, out_dim]
-        """        
-        return tf.sparse.sparse_dense_matmul(adjacent_sparse, node_features_transformed)
-
-

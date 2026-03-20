@@ -1,0 +1,9 @@
+.mat-mdc-table .mdc-data-table__row:not(.mdc-data-table__row--selected):hover {
+    cursor: pointer !important;
+    background-color: rgba(227, 242, 253, 0.9) !important;
+}
+
+.mat-mdc-row.is-selected {
+  background-color: #e3f2fd !important; /* Light Material Blue */
+  position: relative;
+}

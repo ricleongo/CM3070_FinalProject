@@ -25,7 +25,6 @@ import { Subject, takeUntil } from 'rxjs';
     imports: [
         FuseLoadingBarComponent,
         FuseVerticalNavigationComponent,
-        NotificationsComponent,
         UserComponent,
         MatIconModule,
         MatButtonModule,

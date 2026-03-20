@@ -12,6 +12,8 @@ from .loss_results import router as loss_results
 from .realtime_scoring import router as realtime_scoring
 from .simulate_attack import router as simulate_attack
 
+from .heatmap_risk import router as heatmap_risk
+
 api_router = APIRouter()
 
 # Transductive Use Cases:
@@ -27,3 +29,8 @@ api_router.include_router(loss_results, tags=["Train and Validation Loss Results
 # Inductive Use Cases:
 api_router.include_router(realtime_scoring, tags=["Realtime Transaction Scoring"])
 api_router.include_router(simulate_attack, tags=["Simulating realtime attack"])
+
+
+api_router.include_router(heatmap_risk, tags=[""])
+
+

@@ -1,5 +1,8 @@
 import numpy as np
 import networkx as nx
+import pandas as pd
+
+from sklearn.metrics import roc_curve, precision_recall_curve
 
 from src.app.schemas.fraud_history import TransactionScore
 from src.app.schemas.network_risk import RiskScore
@@ -14,7 +17,18 @@ class TransductiveScoringService:
     def __init__(self, model):
         self.model = model
 
-    def score_history(self, transaction_ids):
+    def get_top_transaction_ids(self, top_list):
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        transactions_df = pd.read_csv("data/elliptic/elliptic_txs_classes.csv")
+
+        return transactions_df["txId"].head(top_list)
+
+
+    def get_score_history(self, transaction_ids):
         from src.app.main import elliptic_snapshot
 
         if elliptic_snapshot is None:
@@ -25,7 +39,7 @@ class TransductiveScoringService:
             for transaction_id in transaction_ids
         ]
         
-        predictions = self._get_network_predictions(elliptic_snapshot)
+        predictions = self._get_flatten_predictions(elliptic_snapshot)
 
         return [
             TransactionScore(
@@ -36,7 +50,7 @@ class TransductiveScoringService:
             if index in transaction_indexes
         ]
     
-    def score_network_risk(self, transaction_id, hop_depth=1):
+    def get_score_network_risk(self, transaction_id, hop_depth=1):
         from src.app.main import elliptic_snapshot
 
         if elliptic_snapshot is None:
@@ -44,7 +58,7 @@ class TransductiveScoringService:
 
         transaction_index = elliptic_snapshot.get_index_by_transaction(transaction_id)
 
-        predictions = self._get_network_predictions(elliptic_snapshot)
+        predictions = self._get_flatten_predictions(elliptic_snapshot)
 
         own_risk = float(predictions[transaction_index])
 
@@ -70,7 +84,7 @@ class TransductiveScoringService:
             suspicious_neighbors = suspicious_neighbors
         )
 
-    def analyze_cluster(self, transaction_id, hop_depth=2):
+    def get_cluster_analysis(self, transaction_id, hop_depth=2):
         # Lazy load snapshot that is loaded from application start.
         from src.app.main import elliptic_snapshot
 
@@ -79,7 +93,7 @@ class TransductiveScoringService:
         
         transaction_index = elliptic_snapshot.get_index_by_transaction(transaction_id)
 
-        predictions = self._get_network_predictions(elliptic_snapshot)
+        predictions = self._get_flatten_predictions(elliptic_snapshot)
 
         scipy_sparce_adjacent_list = elliptic_snapshot.get_scipy_sparce_adjacent_hops()
 
@@ -119,7 +133,7 @@ class TransductiveScoringService:
         if elliptic_snapshot is None:
             return None
 
-        predictions = self._get_network_predictions(elliptic_snapshot)
+        predictions = self._get_flatten_predictions(elliptic_snapshot)
 
         suspicious_transactions = np.where(predictions > risk_threshold)[0]
 
@@ -164,7 +178,7 @@ class TransductiveScoringService:
 
         return results[:limit]
 
-    def extract_network_subgraph(self, transaction_id, hop_depth=2):
+    def get_network_subgraph(self, transaction_id, hop_depth=2):
 
         from src.app.main import elliptic_snapshot
 
@@ -173,7 +187,7 @@ class TransductiveScoringService:
 
         transaction_index = elliptic_snapshot.get_index_by_transaction(transaction_id)
 
-        predictions = self._get_network_predictions(elliptic_snapshot)
+        predictions = self._get_flatten_predictions(elliptic_snapshot)
 
 
         scipy_sparce_adjacent_list = elliptic_snapshot.get_scipy_sparce_adjacent_hops()
@@ -240,6 +254,29 @@ class TransductiveScoringService:
             "edges": edge_list
         }    
 
+    def get_temporal_risk_heatmap(self):
+        """
+        Returns heatmap matrix: 49 time steps x top N features
+        Filtered to illitic-predicted transaction only.
+        Cell value = normalized mean feature activation (0-1).
+        """
+        from src.app.main import elliptic_snapshot
+
+        if elliptic_snapshot is None:
+            return None
+        
+        predictions = self._get_full_feature_predictions(elliptic_snapshot)
+
+        f1_threshold = self._get_f1_maximizing_threshold(predictions, '1')
+
+        youden_threshold = self._get_youden_statistic_thresshold(predictions, '1')
+
+        print("predictions", predictions.head(2))
+        print("f1_threshold, youden_threshold", f1_threshold, youden_threshold)
+
+        illicit_df = predictions[predictions['prediction'] >= f1_threshold]
+
+
 
     def get_model_confusion_matrix(self):
         from src.app.main import elliptic_snapshot
@@ -271,16 +308,81 @@ class TransductiveScoringService:
             "val_results": val_results
         }
 
-    def _get_network_predictions(self, elliptic_snapshot):
-        # Collect Elliptic Snapshot generated in training step.
+    def _get_flatten_predictions(self, elliptic_snapshot):
+        # Collect Elliptic `node_features` Snapshot generated in training step.
         node_features = elliptic_snapshot.get_node_features()
         
         # Collect Elliptic Adjacents by Hop generated in training step.
         adjacent_list = elliptic_snapshot.get_adjacent_hops()
 
         # Fit with input sample.
-        predictions = self.model(node_features, adjacent_list, training=False)
+        predictions = self.model((node_features, adjacent_list), training=False)
 
         # Flatten results.
         return predictions.numpy().flatten()
     
+    def _get_full_feature_predictions(self, elliptic_snapshot):
+        
+        features_df = pd.read_csv("data/elliptic/elliptic_txs_features.csv", header=None)
+        classes_df = pd.read_csv("data/elliptic/elliptic_txs_classes.csv")
+
+        features_df.columns = (
+            ['txId', 'time_step'] +
+            [f'local_{i}' for i in range(1, 94)] +
+            [f'agg_{j}' for j in range(1, 73)]
+        )
+
+        features_df['prediction'] = self._get_flatten_predictions(elliptic_snapshot)
+        features_df = features_df[['txId', 'time_step', 'prediction']].copy()
+
+        full_features_df = classes_df.merge(features_df, on='txId')
+
+        # Full Feature results.
+        return full_features_df
+
+    def _get_f1_maximizing_threshold(self, dataframe, true_value):
+
+        labelled = dataframe[dataframe['class'] != 'unknown'].copy()
+
+        y_true = np.array(labelled['class'].values)
+        y_scores = np.array(labelled['prediction'].values)
+
+        precision, recall, pr_threshold = precision_recall_curve(
+            y_true, 
+            y_scores,
+            pos_label = true_value if true_value is not None else '1'
+        )
+
+        f1_scores = 2 * (precision * recall) / (precision + recall + 1e-8)
+
+        best_scores = np.argmax(f1_scores)
+
+        best_threshold = pr_threshold[best_scores]
+
+        return best_threshold
+    
+    
+    def _get_youden_statistic_thresshold(self, dataframe, true_value):
+        labelled = dataframe[dataframe['class'] != 'unknown'].copy()
+
+        y_true = np.array(labelled['class'].values)
+        y_scores = np.array(labelled['prediction'].values)
+
+        fpr, tpr, roc_thresholds = roc_curve(
+            y_true,
+            y_scores,
+            pos_label = true_value if true_value is not None else '1'
+        )
+
+        youden_j = tpr - fpr
+
+        best_idx = np.argmax(youden_j)
+
+        best_threshold_roc = roc_thresholds[best_idx]
+
+        return best_threshold_roc
+
+    def weighted_mean(self, group):
+        weights = group['illicit_prob']
+        return group[top_features].multiply(weights, axis=0).sum() / weights.sum()
+
