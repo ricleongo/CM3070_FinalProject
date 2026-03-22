@@ -3149,8 +3149,8 @@ export const contacts = [
 ];
 export const profile: any = {
     id: 'cfaad35d-07a3-4447-a6c3-d8c3d54fd5df',
-    name: 'Nicola Tesla',
-    email: 'nicola.tesla@company.com',
+    name: 'Juan Leon',
+    email: 'juan.leon@company.com',
     avatar: 'images/avatars/male-07.jpg',
     about: "Hi there! I'm using FuseChat.",
 };

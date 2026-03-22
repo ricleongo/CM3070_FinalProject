@@ -9,10 +9,10 @@ import { LayoutComponent } from 'app/layout/layout.component';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
 
-    // Redirect empty path to '/example'
+    // Redirect empty path to '/dashboards/analysis'
     {path: '', pathMatch : 'full', redirectTo: 'dashboards/analysis'},
 
-    // Redirect signed-in user to the '/example'
+    // Redirect signed-in user to the '/dashboards/analysis'
     //
     // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
     // path. Below is another redirection for that path to redirect the user to the desired
@@ -79,7 +79,9 @@ export const appRoutes: Route[] = [
                 { path: 'analysis', loadChildren: () => import('app/modules/admin/dashboards/analysis/analysis.router') },
             ]},
 
-            {path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes')},
+            // Transfer
+            { path: 'transfer', loadChildren: () => import('app/modules/admin/inductive_scoring/scoring.routes') },
+
         ]
     }
 ];

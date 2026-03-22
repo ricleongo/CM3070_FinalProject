@@ -11,17 +11,22 @@ export class GraphDashboardService {
     private baseUrl = '/api/v1';
 
     selectedScore: BehaviorSubject<HistoryScore> = new BehaviorSubject(null);
-    historyScores: BehaviorSubject<HistoryScore[]> = new BehaviorSubject([]);
+    historyScores: BehaviorSubject<HistoryScore[]> = new BehaviorSubject(null);
 
     constructor(private http: HttpClient) { }
 
     getHistoricScoresMetrics(top_list: number = 5): Observable<HistoryScore[]> {
-        return this.http.get(`${this.baseUrl}/transductive/history/${top_list}`)
+        // Create a mini cache system.
+        const history = this.historyScores?.value?.length > 0? this.historyScores.asObservable() : null;
+
+        return history?? this.http.get(`${this.baseUrl}/transductive/history/${top_list}`)
         .pipe(
-            tap((result: HistoricScoreResponse) => {
+            map((result: HistoricScoreResponse) => {
+
                 this.historyScores.next(result.scores);
-            }),
-            map((result: HistoricScoreResponse) => result.scores)
+
+                return result.scores;
+            })
         )
     }
 

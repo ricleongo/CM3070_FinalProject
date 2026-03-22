@@ -99,7 +99,7 @@ export const mails = [
             avatar: 'images/avatars/female-01.jpg',
             contact: 'Myra Dudley <myra.dudley@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         bcc: ['Julie T. <julie.t@company.com>'],
         date: now
@@ -151,7 +151,7 @@ export const mails = [
             avatar: 'images/avatars/male-01.jpg',
             contact: 'Shaw Murray <shaw.murray@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: now
             .set({
                 hour: 18,
@@ -175,7 +175,7 @@ export const mails = [
             avatar: 'images/avatars/male-02.jpg',
             contact: 'Sanders Beck <sanders.beck@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: now
             .set({
@@ -200,7 +200,7 @@ export const mails = [
             avatar: 'images/avatars/male-03.jpg',
             contact: 'Zimmerman Gould <zimmerman.gould@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: now
             .minus({ day: 1 })
             .set({
@@ -225,7 +225,7 @@ export const mails = [
             avatar: 'images/avatars/female-02.jpg',
             contact: 'Karina Alford <karina.alford@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: now
             .minus({ day: 1 })
@@ -251,7 +251,7 @@ export const mails = [
             avatar: 'images/avatars/female-03.jpg',
             contact: 'Carla Gray <carla.gray@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: now
             .minus({ day: 1 })
@@ -278,7 +278,7 @@ export const mails = [
             avatar: 'images/avatars/male-04.jpg',
             contact: 'Rice Cash <rice.cash@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -329,7 +329,7 @@ export const mails = [
             avatar: 'images/avatars/female-04.jpg',
             contact: 'Elaine Ortiz <elaine.ortiz@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: now
             .minus({ day: 2 })
@@ -360,7 +360,7 @@ export const mails = [
             avatar: 'images/avatars/male-05.jpg',
             contact: 'Fleming Stone <fleming.stone@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: now
             .minus({ day: 2 })
@@ -390,7 +390,7 @@ export const mails = [
             avatar: 'images/avatars/male-06.jpg',
             contact: 'England Wiley <england.wiley@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: now
             .minus({ day: 5 })
             .set({
@@ -420,7 +420,7 @@ export const mails = [
             avatar: 'images/avatars/male-07.jpg',
             contact: 'Ingram Fowler <ingram.fowler@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sun Jan 07 2018 03:51:20 GMT+0000 (UTC)').toISOString(),
         subject:
             'Aliquip eiusmod pariatur adipisicing id consectetur sunt ad dolore consequat commodo',
@@ -440,7 +440,7 @@ export const mails = [
             avatar: 'images/avatars/female-05.jpg',
             contact: 'Diana Walsh <diana.walsh@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Fri Jun 29 2018 07:37:52 GMT+0000 (UTC)').toISOString(),
         subject: 'Non anim id laborum in et id',
         content:
@@ -486,7 +486,7 @@ export const mails = [
             avatar: 'images/avatars/male-08.jpg',
             contact: 'Mckinney Marsh <mckinney.marsh@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Wed Jun 20 2018 15:24:03 GMT+0000 (UTC)').toISOString(),
         subject:
             'Adipisicing proident laborum qui deserunt adipisicing exercitation id sint',
@@ -512,7 +512,7 @@ export const mails = [
             avatar: 'images/avatars/male-09.jpg',
             contact: 'Meyer Fuller <meyer.fuller@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Wed Jan 31 2018 08:17:08 GMT+0000 (UTC)').toISOString(),
         subject: 'Excepteur sunt ut ipsum ad culpa aliqua quis',
@@ -538,7 +538,7 @@ export const mails = [
             avatar: 'images/avatars/female-06.jpg',
             contact: 'Carolina Wade <carolina.wade@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sat Mar 24 2018 17:50:27 GMT+0000 (UTC)').toISOString(),
         subject: 'In sunt pariatur sunt sint exercitation',
@@ -562,7 +562,7 @@ export const mails = [
             avatar: 'images/avatars/male-10.jpg',
             contact: 'Graves Huber <graves.huber@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sun Mar 25 2018 02:46:44 GMT+0000 (UTC)').toISOString(),
         subject:
             'Elit est aute anim ea culpa labore occaecat adipisicing officia',
@@ -582,7 +582,7 @@ export const mails = [
             avatar: 'images/avatars/male-11.jpg',
             contact: 'Tucker Santiago <tucker.santiago@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Mon Sep 17 2018 14:41:42 GMT+0000 (UTC)').toISOString(),
         subject: 'Ullamco qui ex eu ea officia labore incididunt',
         content:
@@ -607,7 +607,7 @@ export const mails = [
             avatar: 'images/avatars/female-07.jpg',
             contact: 'Becky Cain <becky.cain@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -653,7 +653,7 @@ export const mails = [
             avatar: 'images/avatars/male-12.jpg',
             contact: 'Miller Vazquez <miller.vazquez@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -680,7 +680,7 @@ export const mails = [
             avatar: 'images/avatars/male-13.jpg',
             contact: 'Delgado Stevens <delgado.stevens@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Wed Jan 17 2018 09:56:25 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -706,7 +706,7 @@ export const mails = [
             avatar: 'images/avatars/female-08.jpg',
             contact: 'Concepcion Cleveland <concepcion.cleveland@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Fri Aug 17 2018 04:41:26 GMT+0000 (UTC)').toISOString(),
         subject:
             'Aliqua pariatur non tempor velit eu amet sit et proident Lorem',
@@ -730,7 +730,7 @@ export const mails = [
             avatar: 'images/avatars/female-09.jpg',
             contact: 'Robin Berger <robin.berger@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Apr 26 2018 20:55:18 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -751,7 +751,7 @@ export const mails = [
             avatar: 'images/avatars/female-10.jpg',
             contact: 'Lynnette Burton <lynnette.burton@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Fri Nov 02 2018 16:15:50 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -772,7 +772,7 @@ export const mails = [
             avatar: 'images/avatars/female-11.jpg',
             contact: 'Carmella Rios <carmella.rios@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Jul 05 2018 14:26:57 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -796,7 +796,7 @@ export const mails = [
             avatar: 'images/avatars/male-14.jpg',
             contact: 'Molina Pace <molina.pace@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Mon Sep 17 2018 21:45:31 GMT+0000 (UTC)').toISOString(),
         subject: 'Dolor anim non labore est aliquip sunt pariatur',
         content:
@@ -830,7 +830,7 @@ export const mails = [
             avatar: 'images/avatars/female-12.jpg',
             contact: 'Olga Osborn <olga.osborn@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -860,7 +860,7 @@ export const mails = [
             avatar: 'images/avatars/female-13.jpg',
             contact: 'Brooke Petersen <brooke.petersen@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -888,7 +888,7 @@ export const mails = [
             avatar: 'images/avatars/male-15.jpg',
             contact: 'Estes Walter <estes.walter@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue Jul 17 2018 03:52:54 GMT+0000 (UTC)').toISOString(),
         subject: 'Reprehenderit ad do quis ut fugiat proident labore',
@@ -908,7 +908,7 @@ export const mails = [
             avatar: 'images/avatars/male-16.jpg',
             contact: 'Holman Oconnor <holman.oconnor@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sat Jan 13 2018 22:30:44 GMT+0000 (UTC)').toISOString(),
         subject:
             'Duis dolore eu sint anim ipsum commodo esse cillum ipsum culpa commodo',
@@ -928,7 +928,7 @@ export const mails = [
             avatar: 'images/avatars/male-17.jpg',
             contact: 'Oneill Irwin <oneill.irwin@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -958,7 +958,7 @@ export const mails = [
             avatar: 'images/avatars/female-14.jpg',
             contact: 'Marcie Morgan <marcie.morgan@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue Nov 20 2018 05:55:32 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -979,7 +979,7 @@ export const mails = [
             avatar: 'images/avatars/male-18.jpg',
             contact: 'Crane Trevino <crane.trevino@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1008,7 +1008,7 @@ export const mails = [
             avatar: 'images/avatars/female-15.jpg',
             contact: 'Kristine Wiggins <kristine.wiggins@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue Jan 09 2018 13:55:10 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1051,7 +1051,7 @@ export const mails = [
             avatar: 'images/avatars/female-16.jpg',
             contact: 'Terrie Carney <terrie.carney@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue Jan 23 2018 00:03:55 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1072,7 +1072,7 @@ export const mails = [
             avatar: 'images/avatars/male-19.jpg',
             contact: 'Goff Jennings <goff.jennings@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1101,7 +1101,7 @@ export const mails = [
             avatar: 'images/avatars/male-20.jpg',
             contact: 'Browning Sanchez <browning.sanchez@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Fri Mar 16 2018 20:31:08 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1126,7 +1126,7 @@ export const mails = [
             avatar: 'images/avatars/male-01.jpg',
             contact: 'Carey Lyons <carey.lyons@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Tue May 01 2018 07:56:59 GMT+0000 (UTC)').toISOString(),
         subject: 'Laboris esse ipsum esse eu do ipsum do incididunt',
         content:
@@ -1145,7 +1145,7 @@ export const mails = [
             avatar: 'images/avatars/male-02.jpg',
             contact: 'Hendrix Goodwin <hendrix.goodwin@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Mon Jan 22 2018 19:04:29 GMT+0000 (UTC)').toISOString(),
         subject: 'Magna consectetur occaecat excepteur elit',
         content:
@@ -1169,7 +1169,7 @@ export const mails = [
             avatar: 'images/avatars/female-17.jpg',
             contact: 'Leticia Fulton <leticia.fulton@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sat Mar 31 2018 05:44:48 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1190,7 +1190,7 @@ export const mails = [
             avatar: 'images/avatars/female-18.jpg',
             contact: 'Carmen Shannon <carmen.shannon@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1213,7 +1213,7 @@ export const mails = [
             avatar: 'images/avatars/female-19.jpg',
             contact: 'Hattie Snow <hattie.snow@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1242,7 +1242,7 @@ export const mails = [
             avatar: 'images/avatars/female-20.jpg',
             contact: 'Brandi Bradley <brandi.bradley@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sat Nov 17 2018 10:51:44 GMT+0000 (UTC)').toISOString(),
         subject:
             'Eiusmod nulla incididunt nostrud est mollit quis velit in non irure elit consectetur commodo irure',
@@ -1280,7 +1280,7 @@ export const mails = [
             avatar: 'images/avatars/female-01.jpg',
             contact: 'Patsy Potter <patsy.potter@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue May 15 2018 15:37:38 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1301,7 +1301,7 @@ export const mails = [
             avatar: 'images/avatars/female-02.jpg',
             contact: 'Kathleen Cox <kathleen.cox@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sun Aug 26 2018 04:47:12 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1322,7 +1322,7 @@ export const mails = [
             avatar: 'images/avatars/female-03.jpg',
             contact: 'Kristina Ramirez <kristina.ramirez@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Tue Mar 06 2018 16:13:56 GMT+0000 (UTC)').toISOString(),
         subject:
             'Ea eu cupidatat voluptate magna et Lorem veniam aute ipsum consectetur nisi voluptate',
@@ -1347,7 +1347,7 @@ export const mails = [
             avatar: 'images/avatars/male-03.jpg',
             contact: 'Mays Glass <mays.glass@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Thu Jan 04 2018 11:10:36 GMT+0000 (UTC)').toISOString(),
         subject:
             'Culpa ex pariatur aliqua reprehenderit do occaecat nulla ipsum culpa adipisicing',
@@ -1371,7 +1371,7 @@ export const mails = [
             avatar: 'images/avatars/male-04.jpg',
             contact: 'Barber Zimmerman <barber.zimmerman@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Aug 09 2018 01:33:05 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1392,7 +1392,7 @@ export const mails = [
             avatar: 'images/avatars/female-04.jpg',
             contact: 'Ginger Fry <ginger.fry@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1419,7 +1419,7 @@ export const mails = [
             avatar: 'images/avatars/male-05.jpg',
             contact: 'Gardner Burnett <gardner.burnett@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Mon Mar 19 2018 13:34:20 GMT+0000 (UTC)').toISOString(),
         subject: 'Labore anim ullamco labore nisi eiusmod duis commodo',
         content:
@@ -1441,7 +1441,7 @@ export const mails = [
             avatar: 'images/avatars/female-05.jpg',
             contact: 'Lula Lucas <lula.lucas@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1470,7 +1470,7 @@ export const mails = [
             avatar: 'images/avatars/male-06.jpg',
             contact: 'Mcguire Crosby <mcguire.crosby@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Fri Mar 09 2018 04:54:41 GMT+0000 (UTC)').toISOString(),
         subject:
             'Eiusmod esse pariatur ipsum elit laborum tempor cillum amet irure labore duis ad amet aliqua',
@@ -1493,7 +1493,7 @@ export const mails = [
             avatar: 'images/avatars/male-07.jpg',
             contact: 'Walsh Bender <walsh.bender@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Nov 22 2018 20:26:17 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1533,7 +1533,7 @@ export const mails = [
             avatar: 'images/avatars/male-08.jpg',
             contact: 'Baker Guthrie <baker.guthrie@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sat Jul 21 2018 07:51:09 GMT+0000 (UTC)').toISOString(),
         subject: 'In ipsum elit esse laboris qui',
@@ -1557,7 +1557,7 @@ export const mails = [
             avatar: 'images/avatars/female-06.jpg',
             contact: 'Olivia Ratliff <olivia.ratliff@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1580,7 +1580,7 @@ export const mails = [
             avatar: 'images/avatars/male-09.jpg',
             contact: 'Schneider Kirby <schneider.kirby@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1610,7 +1610,7 @@ export const mails = [
             avatar: 'images/avatars/male-10.jpg',
             contact: 'Griffith Keith <griffith.keith@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Tue Dec 11 2018 06:27:01 GMT+0000 (UTC)').toISOString(),
         subject:
             'Ex occaecat qui veniam qui consectetur aliquip ad reprehenderit laborum proident',
@@ -1635,7 +1635,7 @@ export const mails = [
             avatar: 'images/avatars/female-07.jpg',
             contact: 'Beverly Pugh <beverly.pugh@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sun Oct 21 2018 14:36:41 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1661,7 +1661,7 @@ export const mails = [
             avatar: 'images/avatars/female-08.jpg',
             contact: 'Ila Mclaughlin <ila.mclaughlin@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Wed Aug 01 2018 13:55:15 GMT+0000 (UTC)').toISOString(),
         subject: 'Enim proident sit dolor officia sit magna ea tempor',
         content:
@@ -1686,7 +1686,7 @@ export const mails = [
             avatar: 'images/avatars/female-09.jpg',
             contact: 'Jenna Manning <jenna.manning@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1714,7 +1714,7 @@ export const mails = [
             avatar: 'images/avatars/female-10.jpg',
             contact: 'Deann Hansen <deann.hansen@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Jan 10 2019 12:13:47 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1735,7 +1735,7 @@ export const mails = [
             avatar: 'images/avatars/female-11.jpg',
             contact: 'Tisha Moore <tisha.moore@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Wed Mar 07 2018 05:58:09 GMT+0000 (UTC)').toISOString(),
         subject: 'Qui irure ea qui labore fugiat ad voluptate esse',
         content:
@@ -1759,7 +1759,7 @@ export const mails = [
             avatar: 'images/avatars/female-12.jpg',
             contact: 'Janette Elliott <janette.elliott@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1783,7 +1783,7 @@ export const mails = [
             avatar: 'images/avatars/female-13.jpg',
             contact: 'Bettie Wyatt <bettie.wyatt@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Mon Dec 03 2018 17:07:32 GMT+0000 (UTC)').toISOString(),
         subject:
             'Est aliquip nisi pariatur cupidatat veniam qui cillum eu sit ullamco voluptate minim',
@@ -1806,7 +1806,7 @@ export const mails = [
             avatar: 'images/avatars/male-11.jpg',
             contact: 'Hardy Dale <hardy.dale@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1829,7 +1829,7 @@ export const mails = [
             avatar: 'images/avatars/female-14.jpg',
             contact: 'Eileen Bush <eileen.bush@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sat Feb 24 2018 12:22:13 GMT+0000 (UTC)').toISOString(),
         subject: 'Lorem deserunt dolor sunt sit sit mollit',
         content:
@@ -1848,7 +1848,7 @@ export const mails = [
             avatar: 'images/avatars/female-15.jpg',
             contact: 'Melody Mcintosh <melody.mcintosh@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Fri Jul 27 2018 07:20:48 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1869,7 +1869,7 @@ export const mails = [
             avatar: 'images/avatars/male-12.jpg',
             contact: 'Dale Talley <dale.talley@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1897,7 +1897,7 @@ export const mails = [
             avatar: 'images/avatars/male-13.jpg',
             contact: 'Britt Massey <britt.massey@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue Oct 09 2018 00:12:17 GMT+0000 (UTC)').toISOString(),
         subject: 'Cillum tempor cillum ex esse eu Lorem',
@@ -1923,7 +1923,7 @@ export const mails = [
             avatar: 'images/avatars/female-16.jpg',
             contact: 'Madelyn Haynes <madelyn.haynes@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1951,7 +1951,7 @@ export const mails = [
             avatar: 'images/avatars/male-14.jpg',
             contact: 'Rowland Sweet <rowland.sweet@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -1975,7 +1975,7 @@ export const mails = [
             avatar: 'images/avatars/female-17.jpg',
             contact: 'Fern Shaw <fern.shaw@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Wed Feb 21 2018 06:23:12 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -1996,7 +1996,7 @@ export const mails = [
             avatar: 'images/avatars/female-18.jpg',
             contact: 'Lorraine Ballard <lorraine.ballard@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sun Jun 24 2018 13:46:02 GMT+0000 (UTC)').toISOString(),
         subject: 'Velit nisi ut laboris id et do aliquip',
@@ -2020,7 +2020,7 @@ export const mails = [
             avatar: 'images/avatars/male-15.jpg',
             contact: 'Jennings Franklin <jennings.franklin@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2044,7 +2044,7 @@ export const mails = [
             avatar: 'images/avatars/female-19.jpg',
             contact: 'Colette Cole <colette.cole@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Fri Sep 21 2018 08:37:21 GMT+0000 (UTC)').toISOString(),
         subject: 'Sit non consequat et fugiat id laboris',
         content:
@@ -2067,7 +2067,7 @@ export const mails = [
             avatar: 'images/avatars/female-20.jpg',
             contact: 'Kim Carlson <kim.carlson@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Wed Nov 28 2018 07:57:15 GMT+0000 (UTC)').toISOString(),
         subject: 'Ullamco ad consectetur ut esse',
@@ -2091,7 +2091,7 @@ export const mails = [
             avatar: 'images/avatars/female-01.jpg',
             contact: 'Rena Park <rena.park@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sat Oct 13 2018 12:57:58 GMT+0000 (UTC)').toISOString(),
         subject: 'Nulla qui anim ullamco officia elit',
@@ -2111,7 +2111,7 @@ export const mails = [
             avatar: 'images/avatars/male-16.jpg',
             contact: 'Haney Gibson <haney.gibson@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2134,7 +2134,7 @@ export const mails = [
             avatar: 'images/avatars/female-02.jpg',
             contact: 'Freda Frank <freda.frank@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Wed Nov 21 2018 01:26:11 GMT+0000 (UTC)').toISOString(),
         subject: 'Magna sint dolor sit laborum enim',
@@ -2154,7 +2154,7 @@ export const mails = [
             avatar: 'images/avatars/male-17.jpg',
             contact: 'Burns White <burns.white@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Mon May 14 2018 20:06:57 GMT+0000 (UTC)').toISOString(),
         subject: 'Veniam cillum ad proident incididunt nisi exercitation est',
@@ -2174,7 +2174,7 @@ export const mails = [
             avatar: 'images/avatars/male-18.jpg',
             contact: 'Fischer Cervantes <fischer.cervantes@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Thu Dec 13 2018 03:52:15 GMT+0000 (UTC)').toISOString(),
         subject:
             'Amet aute tempor sit tempor minim nulla dolor commodo aute eu',
@@ -2197,7 +2197,7 @@ export const mails = [
             avatar: 'images/avatars/male-19.jpg',
             contact: 'Cervantes Reyes <cervantes.reyes@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Tue Oct 16 2018 11:06:27 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -2222,7 +2222,7 @@ export const mails = [
             avatar: 'images/avatars/male-20.jpg',
             contact: 'Cooke Whitney <cooke.whitney@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sat Jul 28 2018 14:16:37 GMT+0000 (UTC)').toISOString(),
         subject:
             'Est veniam aliquip culpa deserunt commodo ad laboris ad ullamco',
@@ -2242,7 +2242,7 @@ export const mails = [
             avatar: 'images/avatars/female-03.jpg',
             contact: 'Lee Lloyd <lee.lloyd@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2269,7 +2269,7 @@ export const mails = [
             avatar: 'images/avatars/male-01.jpg',
             contact: 'Benson Shields <benson.shields@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2292,7 +2292,7 @@ export const mails = [
             avatar: 'images/avatars/male-02.jpg',
             contact: 'Emerson Whitehead <emerson.whitehead@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2320,7 +2320,7 @@ export const mails = [
             avatar: 'images/avatars/female-04.jpg',
             contact: 'Annabelle Greene <annabelle.greene@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Aug 30 2018 03:24:13 GMT+0000 (UTC)').toISOString(),
         subject: 'Commodo reprehenderit laborum nostrud culpa et aliquip',
@@ -2340,7 +2340,7 @@ export const mails = [
             avatar: 'images/avatars/male-03.jpg',
             contact: 'Dawson Lewis <dawson.lewis@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Fri Aug 03 2018 03:03:12 GMT+0000 (UTC)').toISOString(),
         subject: 'Ipsum duis sint incididunt nulla in labore nulla',
         content:
@@ -2364,7 +2364,7 @@ export const mails = [
             avatar: 'images/avatars/male-04.jpg',
             contact: 'Cole Dotson <cole.dotson@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2392,7 +2392,7 @@ export const mails = [
             avatar: 'images/avatars/male-05.jpg',
             contact: 'Bernard Cunningham <bernard.cunningham@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Tue Aug 21 2018 08:51:03 GMT+0000 (UTC)').toISOString(),
         subject:
             'Consequat Lorem fugiat et veniam ad veniam proident excepteur laborum',
@@ -2417,7 +2417,7 @@ export const mails = [
             avatar: 'images/avatars/male-06.jpg',
             contact: 'Edwards Mcconnell <edwards.mcconnell@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2444,7 +2444,7 @@ export const mails = [
             avatar: 'images/avatars/female-05.jpg',
             contact: 'Lizzie Sanders <lizzie.sanders@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Fri Sep 07 2018 01:29:31 GMT+0000 (UTC)').toISOString(),
         subject: 'Sint enim elit Lorem laboris',
@@ -2470,7 +2470,7 @@ export const mails = [
             avatar: 'images/avatars/female-06.jpg',
             contact: 'Elise Hicks <elise.hicks@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: [
             'Graham Belltower <graham.belltower@company.com>',
             'Julie T. <julie.t@company.com>',
@@ -2494,7 +2494,7 @@ export const mails = [
             avatar: 'images/avatars/female-07.jpg',
             contact: 'Sherri Roth <sherri.roth@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Thu Dec 20 2018 09:37:24 GMT+0000 (UTC)').toISOString(),
         subject: 'Ex laboris et sunt ex aute aute nisi',
@@ -2518,7 +2518,7 @@ export const mails = [
             avatar: 'images/avatars/male-07.jpg',
             contact: 'Skinner Hawkins <skinner.hawkins@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sun Jun 10 2018 07:50:01 GMT+0000 (UTC)').toISOString(),
         subject:
@@ -2542,7 +2542,7 @@ export const mails = [
             avatar: 'images/avatars/female-08.jpg',
             contact: 'Velma Ellison <velma.ellison@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Thu Nov 01 2018 10:59:46 GMT+0000 (UTC)').toISOString(),
         subject: 'Ex duis cupidatat qui velit',
         content:
@@ -2564,7 +2564,7 @@ export const mails = [
             avatar: 'images/avatars/female-09.jpg',
             contact: 'Tamara Fitzgerald <tamara.fitzgerald@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sat Feb 24 2018 15:37:16 GMT+0000 (UTC)').toISOString(),
         subject:
             'Et esse sit eiusmod dolore eiusmod ad sit ipsum adipisicing ut esse',
@@ -2584,7 +2584,7 @@ export const mails = [
             avatar: 'images/avatars/male-08.jpg',
             contact: 'Duncan Gilmore <duncan.gilmore@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Mon Dec 31 2018 08:15:40 GMT+0000 (UTC)').toISOString(),
         subject: 'Ipsum non ad commodo dolor enim labore ullamco',
         content:
@@ -2603,7 +2603,7 @@ export const mails = [
             avatar: 'images/avatars/female-10.jpg',
             contact: 'Betty Dean <betty.dean@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Thu Aug 16 2018 06:17:15 GMT+0000 (UTC)').toISOString(),
         subject:
             'Laborum magna cupidatat qui sint proident aliquip ut commodo aute sint',
@@ -2628,7 +2628,7 @@ export const mails = [
             avatar: 'images/avatars/male-09.jpg',
             contact: 'Pate Gardner <pate.gardner@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         date: new Date('Sat May 26 2018 10:36:30 GMT+0000 (UTC)').toISOString(),
         subject: 'Non labore sit dolor quis in qui esse velit ad sit',
         content:
@@ -2647,7 +2647,7 @@ export const mails = [
             avatar: 'images/avatars/male-10.jpg',
             contact: 'Lawson Kidd <lawson.kidd@company.com>',
         },
-        to: 'me <nicola.tesla@company.com>',
+        to: 'me <juan.leon@company.com>',
         cc: ['Graham Belltower <graham.belltower@company.com>'],
         date: new Date('Sun Mar 18 2018 02:18:44 GMT+0000 (UTC)').toISOString(),
         subject: 'Proident non proident dolore non dolor reprehenderit',

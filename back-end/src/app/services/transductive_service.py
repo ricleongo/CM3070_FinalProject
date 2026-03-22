@@ -17,7 +17,7 @@ class TransductiveScoringService:
     def __init__(self, model):
         self.model = model
 
-    def get_top_transaction_ids(self, top_list):
+    def get_top_flagged_transactions(self, top_list):
         from src.app.main import elliptic_snapshot
 
         if elliptic_snapshot is None:
@@ -25,7 +25,7 @@ class TransductiveScoringService:
         
         transactions_df = pd.read_csv("data/elliptic/elliptic_txs_classes.csv")
 
-        return transactions_df["txId"].head(top_list)
+        return transactions_df[transactions_df["class"]!="unknown"]["txId"].head(top_list)
 
 
     def get_score_history(self, transaction_ids):

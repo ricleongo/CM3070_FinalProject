@@ -46,7 +46,7 @@ def find_fraud_history(top_list: int = 5):
             - identify laundering networks
     """
 
-    transaction_list = service.get_top_transaction_ids(top_list)
+    transaction_list = service.get_top_flagged_transactions(top_list)
 
     scores = service.get_score_history(
         transaction_list

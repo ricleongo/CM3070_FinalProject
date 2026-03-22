@@ -103,12 +103,6 @@ class EllipticSnapshotSingleton:
 
     def _load_data_from_file(self, file_root):
 
-        # f"{snapshot_dir}/transaction_to_index.json"
-        # self.transaction_to_index = json.load(f)
-        # self.index_to_transaction = {
-        #     index: transaction for transaction, index in self.transaction_to_index.items()
-        # }
-
         with open(file_root) as f:
             data_from_file = json.load(f)
 

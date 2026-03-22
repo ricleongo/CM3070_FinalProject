@@ -607,17 +607,113 @@ export const crypto = {
     },
     prices: {
         btc: 8878.48,
-        eth: 170.46,
-        bch: 359.93,
-        xrp: 0.23512,
+        eth: 1,
+        bch: 1,
+        xrp: 1,
     },
     wallets: {
-        btc: 24.97311243,
-        eth: 126.3212,
-        bch: 78.454412,
-        xrp: 11278.771123,
+        btc: { bal: 24.97311243, own: 'Juan Leon', iban: '230389796' },
+        eth: { bal: 126.3212, own: 'Juan Leon', iban: '232947878' },
+        bch: { bal: 78.454412, own: 'Juan Leon', iban: '232629023' },
+        xrp: { bal: 11278.771123, own: 'Juan Leon', iban: '16754007' },
     },
     watchlist: [
+        {
+            title: 'Bitcoin',
+            iso: 'BTC',
+            amount: 8878.48,
+            trend: {
+                dir: 'up',
+                amount: 0.17,
+            },
+            series: [
+                {
+                    name: 'Price',
+                    data: [
+                        {
+                            x: now.minus({ minutes: 20 }).toFormat('HH:mm'),
+                            y: 6574.77,
+                        },
+                        {
+                            x: now.minus({ minutes: 19 }).toFormat('HH:mm'),
+                            y: 6574.41,
+                        },
+                        {
+                            x: now.minus({ minutes: 18 }).toFormat('HH:mm'),
+                            y: 6575.08,
+                        },
+                        {
+                            x: now.minus({ minutes: 17 }).toFormat('HH:mm'),
+                            y: 6575.08,
+                        },
+                        {
+                            x: now.minus({ minutes: 16 }).toFormat('HH:mm'),
+                            y: 6574.09,
+                        },
+                        {
+                            x: now.minus({ minutes: 15 }).toFormat('HH:mm'),
+                            y: 6568.84,
+                        },
+                        {
+                            x: now.minus({ minutes: 14 }).toFormat('HH:mm'),
+                            y: 6567.49,
+                        },
+                        {
+                            x: now.minus({ minutes: 13 }).toFormat('HH:mm'),
+                            y: 6559.75,
+                        },
+                        {
+                            x: now.minus({ minutes: 12 }).toFormat('HH:mm'),
+                            y: 6566.65,
+                        },
+                        {
+                            x: now.minus({ minutes: 11 }).toFormat('HH:mm'),
+                            y: 6567.52,
+                        },
+                        {
+                            x: now.minus({ minutes: 10 }).toFormat('HH:mm'),
+                            y: 6567.59,
+                        },
+                        {
+                            x: now.minus({ minutes: 9 }).toFormat('HH:mm'),
+                            y: 6564.18,
+                        },
+                        {
+                            x: now.minus({ minutes: 8 }).toFormat('HH:mm'),
+                            y: 6570.11,
+                        },
+                        {
+                            x: now.minus({ minutes: 7 }).toFormat('HH:mm'),
+                            y: 6562.7,
+                        },
+                        {
+                            x: now.minus({ minutes: 6 }).toFormat('HH:mm'),
+                            y: 6562.7,
+                        },
+                        {
+                            x: now.minus({ minutes: 5 }).toFormat('HH:mm'),
+                            y: 6562.77,
+                        },
+                        {
+                            x: now.minus({ minutes: 4 }).toFormat('HH:mm'),
+                            y: 6569.46,
+                        },
+                        {
+                            x: now.minus({ minutes: 3 }).toFormat('HH:mm'),
+                            y: 6571.04,
+                        },
+                        {
+                            x: now.minus({ minutes: 2 }).toFormat('HH:mm'),
+                            y: 6571.48,
+                        },
+                        {
+                            x: now.minus({ minutes: 1 }).toFormat('HH:mm'),
+                            y: 6571.3,
+                        },
+                    ],
+                },
+            ],
+        },        
         {
             title: 'Ethereum',
             iso: 'ETH',

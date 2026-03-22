@@ -1,0 +1,381 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+    <mat-drawer-container class="h-full flex-auto">
+        <!-- Drawer -->
+        <mat-drawer class="w-80" [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened" #matDrawer>
+            <!-- Header -->
+            <div class="pt-10 pb-4 pl-4">
+                <!-- Panel header -->
+                <div class="flex items-center">
+                    <div class="ml-2 text-3xl font-bold leading-none tracking-tight lg:ml-0">
+                        Transfer From
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet -->
+            <div class="flex flex-auto flex-col dark:bg-default border-b pb-20 pt-4">
+                <div class="flex items-center justify-between px-8 pb-4">
+                    <div class="text-2xl font-semibold leading-tight">
+                        Wallet
+                    </div>
+                    <div class="-mr-3">
+                        <button mat-icon-button [matMenuTriggerFor]="listCard08Menu">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ellipsis-vertical'"></mat-icon>
+                        </button>
+                        <mat-menu #listCard08Menu="matMenu">
+                            <button mat-menu-item>Add Payment Method</button>
+                        </mat-menu>
+                    </div>
+                </div>
+                <div class="flex flex-col px-6 pb-2">
+                    <mat-form-field class="w-full">
+                        <mat-select [value]="'btc'" #walletSelector="matSelect">
+                            <mat-select-trigger>
+                                <span class="flex items-center">
+                                    <span>{{
+                                        walletSelector.triggerValue
+                                        }}</span>
+                                    <span class="text-hint mx-1">-</span>
+                                    <span class="flex items-center font-mono">
+                                        @if (walletSelector.value == 'btc') {
+                                        <span>{{
+                                            data.wallets[
+                                            walletSelector.value
+                                            ]['bal']
+                                            }}</span>
+                                        } @else {
+                                        <span>
+                                            {{
+                                            data.wallets[walletSelector.value]['bal'] /
+                                            data.prices['btc']
+                                            | number: '1.2-4'
+                                            }}</span>
+                                        }
+                                        @if (walletSelector.value == 'btc') {
+                                        <span class="ml-1">{{
+                                            walletSelector.value | uppercase
+                                            }}</span>
+                                        } @else {
+                                        <span class="ml-1">BTC</span>
+                                        }
+
+                                    </span>
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option [value]="'btc'">Bitcoin</mat-option>
+                            <mat-option [value]="'eth'">Checkings 1</mat-option>
+                            <mat-option [value]="'bch'">Checkings 2</mat-option>
+                            <mat-option [value]="'xrp'">Savings 1</mat-option>
+                        </mat-select>
+                        <mat-hint class="flex flex-col">
+                            <div class="flex items-center">
+                                <span class="mr-1">Balance:</span>
+                                <span class="text-normal font-mono font-medium">
+                                    {{
+                                    data.wallets[walletSelector.value]['bal'] *
+                                    data.prices[walletSelector.value]
+                                    | currency: 'USD'
+                                    }} USD
+                                </span>
+
+                            </div>
+
+                            <div class="flex items-center pt-1">
+                                <span class="mr-1">Owner:</span>
+                                <span class="text-normal font-mono font-medium">
+                                    {{
+                                    data.wallets[walletSelector.value]['own']
+                                    }}
+                                </span>
+                            </div>
+
+                            <div class="flex items-center pt-1">
+                                <span class="mr-1">Account:</span>
+                                <span class="text-normal font-mono font-medium">
+                                    {{
+                                    data.wallets[walletSelector.value]['iban']
+                                    }}
+                                </span>
+                            </div>
+
+                        </mat-hint>
+
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Bitcoin Value -->
+            <div class="flex flex-auto flex-col dark:bg-default pt-4">
+                <div class="flex items-center justify-between">
+                    <div class="text-xl font-secondary leading-tight pt-2 pl-8">
+                        Current Bitcoin Value
+                    </div>
+                </div>
+                <div class="flex flex-0 flex-col">
+                    @if (bitcoinData; as item) {
+                    <div class="flex flex-0 items-center border-b p-5">
+                        <div class="flex flex-auto flex-col pr-6">
+                            <div class="flex items-baseline">
+                                <div class="text-secondary mr-1 text-md font-medium">
+                                    {{ item.title }}
+                                </div>
+                                <div class="text-hint text-sm font-medium uppercase tracking-wider">
+                                    ({{ item.iso }})
+                                </div>
+                            </div>
+                            <div class="mt-2 flex items-end">
+                                <div class="min-w-20 font-mono text-2xl leading-none tracking-tighter">
+                                    {{
+                                    item.amount
+                                    | currency
+                                    : 'USD'
+                                    : 'symbol'
+                                    : '1.2-4'
+                                    }}
+                                </div>
+                                <mat-icon class="mx-0.5 mb-px text-green-500 icon-size-3.5" [ngClass]="{
+                                            'text-green-500':
+                                                item.trend.dir === 'up',
+                                            'text-red-500':
+                                                item.trend.dir === 'down',
+                                        }" [svgIcon]="
+                                            item.trend.dir === 'up'
+                                                ? 'heroicons_mini:arrow-long-up'
+                                                : 'heroicons_mini:arrow-long-down'
+                                        "></mat-icon>
+                                <div class="mb-px font-mono text-sm font-medium leading-none" [ngClass]="{
+                                            'text-green-500':
+                                                item.trend.dir === 'up',
+                                            'text-red-500':
+                                                item.trend.dir === 'down',
+                                        }">
+                                    {{ item.trend.amount }}%
+                                </div>
+                            </div>
+                        </div>
+                        <apx-chart class="flex h-10 flex-auto items-center overflow-hidden"
+                            [chart]="watchlistChartOptions.chart" [colors]="
+                                    item.trend.dir === 'up'
+                                        ? ['#48BB78']
+                                        : ['#F56565']
+                                " [series]="item.series" [stroke]="watchlistChartOptions.stroke"
+                            [tooltip]="watchlistChartOptions.tooltip" [xaxis]="watchlistChartOptions.xaxis"></apx-chart>
+                    </div>
+                    }
+                </div>
+            </div>
+
+
+
+            <!-- Beneficiaries -->
+            <div
+                class="flex flex-auto flex-col dark:bg-default mt-6 w-full max-w-80 flex-col px-8 pb-8 pt-2 border-b bg-primary-50">
+                <div class="flex items-center justify-between">
+                    <div class="text-xl font-secondary leading-tight">
+                        Saved Beneficiaries
+                    </div>
+                    <div class="-mr-3">
+                        <button mat-icon-button [matMenuTriggerFor]="listCard08Menu">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ellipsis-vertical'"></mat-icon>
+                        </button>
+                        <mat-menu #listCard08Menu="matMenu">
+                            <button mat-menu-item>Add beneficiary</button>
+                        </mat-menu>
+                    </div>
+                </div>
+
+                <div class="flex flex-col">
+                    <div class="mt-6 flex justify-between">
+                        <img class="h-14 w-14 rounded-full" src="images/avatars/male-03.jpg" alt="Card cover image"
+                            (click)="selectBeneficiary(0)" />
+                        <img class="h-14 w-14 rounded-full" src="images/avatars/female-04.jpg" alt="Card cover image"
+                            (click)="selectBeneficiary(1)" />
+                        <img class="h-14 w-14 rounded-full" src="images/avatars/female-03.jpg" alt="Card cover image"
+                            (click)="selectBeneficiary(2)" />
+                        <img class="h-14 w-14 rounded-full" src="images/avatars/male-04.jpg" alt="Card cover image"
+                            (click)="selectBeneficiary(3)" />
+                    </div>
+                </div>
+            </div>
+        </mat-drawer>
+
+        <!-- Content -->
+        <mat-drawer-content class="flex flex-col">
+            <!-- Transfer to. -->
+            <div class="bg-card flex min-h-full flex-auto flex-col dark:bg-default px-8 pt-8 mb-8">
+                <form [formGroup]="transferInfoForm">
+
+                    <!-- Header -->
+                    <div class="pt-2 pb-10">
+                        <!-- Panel header -->
+                        <div class="flex items-center">
+                            <div class="ml-2 text-3xl font-bold leading-none tracking-tight lg:ml-0">
+                                Transfer to
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Content -->
+                    <div class="mt-8 grid w-full grid-cols-4 gap-6">
+                        <!-- Account -->
+                        <div class="col-span-4">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-label>Account Number</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:key'" matPrefix></mat-icon>
+                                <input [formControlName]="'account'" matInput />
+                            </mat-form-field>
+                        </div>
+                        <!-- Fiat Amount -->
+                        <div class="col-span-2 sm:col-span-2">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-label>Fiat Amount</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:currency-dollar'"
+                                    matPrefix></mat-icon>
+                                <input [formControlName]="'fiatAmount'" matInput />
+                            </mat-form-field>
+                        </div>
+                        <!-- BTC Amount -->
+                        <div class="col-span-2 sm:col-span-2">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-label>BTC Amount</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:currency-dollar'"
+                                    matPrefix></mat-icon>
+                                <input [formControlName]="'btcAmount'" matInput />
+                            </mat-form-field>
+                        </div>
+                        <!-- Purpose -->
+                        <div class="col-span-4 sm:col-span-4">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-label>Purpuse</mat-label>
+                                <input [formControlName]="'purpose'" matInput />
+                            </mat-form-field>
+                        </div>
+                        <!-- Beneficiary Name -->
+                        <div class="col-span-2 sm:col-span-2">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-label>Beneficiary Name</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                                <input [formControlName]="'beneficiaryName'" matInput />
+                            </mat-form-field>
+                        </div>
+                        <!-- Beneficiary Email -->
+                        <div class="col-span-2 sm:col-span-2">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-label>Beneficiary Email</mat-label>
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:envelope'"
+                                    matPrefix></mat-icon>
+                                <input [formControlName]="'beneficiaryEmail'" matInput />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="mb-10 mt-11 border-t"></div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button class="ml-4 px-4" mat-flat-button type="button" [color]="'primary'"
+                            [disabled]="!transferInfoForm.valid" (click)="scoreTransaction()">
+                            Transfer
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
+        </mat-drawer-content>
+    </mat-drawer-container>
+
+
+    <!-- <fuse-alert [type]="'warning'" [appearance]="'outline'">
+        <span fuseAlertTitle>Simulation in progress</span>
+        This is a simulation using hypothetical data. It does not reflect real-world transactions or actual
+        currency values.
+    </fuse-alert> -->
+</div>
+
+
+<fuse-drawer class="z-999 w-screen min-w-screen sm:w-100 sm:min-w-100" fixed [mode]="'over'" [name]="'settingsDrawer'"
+    [position]="'right'" #settingsDrawer>
+    <div class="bg-card flex w-full flex-col overflow-auto">
+        <div class="flex h-20 min-h-20 flex-row items-center bg-warn px-6 text-white">
+            <div class="ml-3 text-2xl font-semibold tracking-tight">
+                Fraud Probability
+            </div>
+        </div>
+
+        <div class="flex flex-col p-6">
+            <div class="text-secondary text-md font-semibold">Transaction ID</div>
+            <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <div class="flex flex-col w-80">
+                    <div class="flex items-center">
+                        <div class="ml-4 flex-auto leading-none">
+                            <div class="text-secondary text-sm font-medium">
+                                
+                            </div>
+                            <div class="mt-2 text-2xl font-medium">
+                                {{ (realtime_score | async)?.transaction_id}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-8" />             
+            <!-- Fraud probability -->
+            <div class="text-secondary text-md font-semibold">Fraud Probability</div>
+            <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                @if (!!realtime_score) {
+
+                <div class="flex flex-col w-80">
+                    <div class="flex items-center">
+                        <div
+                            class="flex h-14 w-14 items-center justify-center rounded bg-red-100 text-red-800 dark:bg-red-600 dark:text-red-50">
+                            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:credit-card'"></mat-icon>
+                        </div>
+                        <div class="ml-4 flex-auto leading-none">
+                            <div class="text-secondary text-sm font-medium">
+                                Fraud Probability
+                            </div>
+                            <div class="mt-2 text-2xl font-medium">
+                                {{ (realtime_score | async)?.fraud_probability | percent: '1.2-2'}}
+                            </div>
+                            <mat-progress-bar class="mt-3 rounded-full" [color]="'warn'" [mode]="'determinate'"
+                                [value]="((realtime_score | async)?.fraud_probability * 100)"></mat-progress-bar>
+                        </div>
+                        <div class="ml-6 mt-auto flex min-w-18 items-end justify-end">
+                            <div class="text-lg leading-none">
+                                {{ (realtime_score | async)?.risk_level?.toUpperCase()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+
+            </div>
+
+            <hr class="my-8" />             
+
+
+            <div class="text-secondary text-md font-semibold">Real Labeled</div>
+            <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <div class="flex flex-col w-80">
+                    <div class="flex items-center">
+                        <div class="ml-4 flex-auto leading-none">
+                            <div class="mt-2 text-2xl font-medium">
+                                {{ (real_label | async) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <hr class="my-8" />
+
+            
+
+        </div>
+    </div>
+</fuse-drawer>

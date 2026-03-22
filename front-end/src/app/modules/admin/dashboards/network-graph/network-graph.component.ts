@@ -2,7 +2,7 @@ import { Component, AfterViewInit, Input, OnInit } from '@angular/core';
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import { NetworkGraphService } from './network-graph.service';
-import { GraphDashboardService } from '../dashboards/graph/graph.service';
+import { GraphDashboardService } from '../../dashboards/graph/graph.service';
 import { HistoryScore } from 'app/core/types/history_score.type';
 
 cytoscape.use(coseBilkent);

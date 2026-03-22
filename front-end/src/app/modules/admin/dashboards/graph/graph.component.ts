@@ -24,7 +24,7 @@ import { KpiSummary, KpiSummaryModel } from 'app/core/types/kpi_scores.type';
 import { RiskDistribution, RiskDistributionModel } from '../../../../core/types/riskDistribution.type';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-import { NetworkGraphComponent } from '../../network-graph/network-graph.component';
+import { NetworkGraphComponent } from '../network-graph/network-graph.component';
 import { ClusterAnalysisService } from './services/cluster_analysis.service';
 import { ClusterAnalysis } from 'app/core/types/cluster_analysis.type';
 
@@ -47,26 +47,23 @@ import { ClusterAnalysis } from 'app/core/types/cluster_analysis.type';
         MatPaginatorModule,
         NetworkGraphComponent,
         AsyncPipe,
-        PercentPipe,
-        DecimalPipe,
-        JsonPipe
+        PercentPipe
     ],
     providers: [DecimalPipe]
 })
 export class GraphComponent implements OnInit, OnDestroy {
     chartRiskDistribution: ApexOptions;
     chartClusterAnalysis: ApexOptions;
-
     riskDistribution: RiskDistribution;
-
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
+    isKpiVisible: Boolean = false;
+    isClusterVisible: Boolean = false;
+    historyScoreDS = new MatTableDataSource<any>([]);
+    selectedHistoryScore = new SelectionModel<any>(false, []);
 
     kpiSummary: BehaviorSubject<KpiSummary> = new BehaviorSubject(null);
     clusterAnalysis: BehaviorSubject<ClusterAnalysis> = new BehaviorSubject(null);
 
-    isKpiVisible: Boolean = false;
-    historyScoreDS = new MatTableDataSource<any>([]);
-    selectedHistoryScore = new SelectionModel<any>(false, []);
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
         this.historyScoreDS.paginator = mp;
@@ -91,8 +88,12 @@ export class GraphComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         this.graphDashboardService.historyScores.subscribe(data => {
-            this.historyScoreDS.data = data;
 
+            if (!data) {
+                return;
+            }
+
+            this.historyScoreDS.data = data;
             this.toggleRow(data[0]);
         });
 
@@ -102,24 +103,21 @@ export class GraphComponent implements OnInit, OnDestroy {
                 return;
 
             this.clusterAnalysisService
-                .getClusterAnalysisMetrics(selected.transaction_id ?? 0)
+                .getClusterAnalysisMetrics(selected?.transaction_id ?? 0)
                 .subscribe((clusterAnalysis: ClusterAnalysis) => {
 
-                    if(!clusterAnalysis)
+                    if (!clusterAnalysis)
                         return;
 
                     const labels = ['Max Risk', 'Mean Risk'];
                     const series = [
-                        +this.decimalPipe.transform(clusterAnalysis.cluster_risk_max * 100, '1.2-2'), 
+                        +this.decimalPipe.transform(clusterAnalysis.cluster_risk_max * 100, '1.2-2'),
                         +this.decimalPipe.transform(clusterAnalysis.cluster_risk_mean * 100, '1.2-2')
                     ];
-                    
+
                     this.loadClusterAnalysisChart(labels, series);
                     this.clusterAnalysis.next(clusterAnalysis);
                 });
-
-            
-
         });
 
         this.kpiSummary.subscribe((kpiData: KpiSummaryModel) => {
@@ -154,9 +152,7 @@ export class GraphComponent implements OnInit, OnDestroy {
 
                 this.kpiSummary.next(summary);
             });
-
     }
-
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -179,6 +175,8 @@ export class GraphComponent implements OnInit, OnDestroy {
 
 
     private loadRiskDistributionChart(labels: string[], series: number[]) {
+
+        this.isClusterVisible = true;
 
         this.chartRiskDistribution = {
             chart: {
@@ -299,5 +297,6 @@ export class GraphComponent implements OnInit, OnDestroy {
             },
         };
 
+        console.log('---- chartClusterAnalysis ----', this.chartClusterAnalysis);
     }
 }
