@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ClusterAnalysis, ClusterAnalysisRequest, ClusterAnalysisResponse,  } from 'app/core/types/cluster_analysis.type';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -21,10 +21,12 @@ export class ClusterAnalysisService {
 
         return this.http.post(`${this.baseUrl}/transductive/cluster-analysis`, requestObj, options)
         .pipe(
-            tap((result: ClusterAnalysisResponse) => {
+            map((result: ClusterAnalysisResponse) => {
+
                 this.clusterAnalysis.next(result.scores);
-            }),
-            map((result: ClusterAnalysisResponse) => result.scores)
+
+                return result.scores;
+            })
         )
     }
 

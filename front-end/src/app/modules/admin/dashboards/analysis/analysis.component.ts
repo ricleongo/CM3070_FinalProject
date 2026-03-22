@@ -90,6 +90,10 @@ export class ModelAnalysisComponent implements OnInit, OnDestroy {
         ]).subscribe(([modelType, transductiveMetrics, inductiveMetrics]) => {
             const metrics = (modelType == MLModelType.Transductive) ? transductiveMetrics : inductiveMetrics
 
+            if (!metrics) {
+                return;
+            }
+
             const aditionalInfo = Object.fromEntries(
                 // Order is important because match with the graph.
                 Object.entries(metrics)

@@ -10,24 +10,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link : '/dashboards/analysis'
     },
     {
-        id   : 'transfer',
+        id   : 'scoring',
         title: 'Transfer',
         type : 'basic',
-        icon : 'heroicons_outline:arrow-right-on-rectangle',
+        icon : 'mat_solid:price_check',
         link : '/transfer'
     },
     {
-        id   : 'wallet',
-        title: 'Crypto Wallet',
+        id   : 'attack',
+        title: 'Attack Simulation',
         type : 'basic',
-        icon : 'heroicons_outline:wallet',
-        link : '/wallet'
-    },
-    {
-        id   : 'contributor',
-        title: 'Contributor',
-        type : 'basic',
-        icon : 'heroicons_outline:adjustments-horizontal',
-        link : '/example'
+        icon : 'feather:shield-off',
+        link : '/attack-simulation'
     }
 ];
