@@ -3,37 +3,24 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'dashboard',
+        title: 'Dashboard',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
-    }
-];
-export const compactNavigation: FuseNavigationItem[] = [
+        link : '/dashboards/analysis'
+    },
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'scoring',
+        title: 'Transfer',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
-        link : '/example'
-    }
-];
-export const futuristicNavigation: FuseNavigationItem[] = [
+        icon : 'mat_solid:price_check',
+        link : '/transfer'
+    },
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'attack',
+        title: 'Attack Simulation',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
-        link : '/example'
-    }
-];
-export const horizontalNavigation: FuseNavigationItem[] = [
-    {
-        id   : 'example',
-        title: 'Example',
-        type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        icon : 'feather:shield-off',
+        link : '/attack-simulation'
     }
 ];

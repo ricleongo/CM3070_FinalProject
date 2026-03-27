@@ -25,6 +25,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FusePlatformService } from '@fuse/services/platform';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen';
 import { FuseUtilsService } from '@fuse/services/utils';
+import { cachingInterceptor } from './services/cache-system/cache.interceptor';
+import { CacheService } from './services/cache-system/cache.service';
 
 export type FuseProviderConfig = {
     mockApi?: {
@@ -72,6 +74,9 @@ export const provideFuse = (
 
         provideHttpClient(withInterceptors([fuseLoadingInterceptor])),
         provideEnvironmentInitializer(() => inject(FuseLoadingService)),
+
+        provideHttpClient(withInterceptors([cachingInterceptor])),
+        provideEnvironmentInitializer(() => inject(CacheService)),
 
         provideEnvironmentInitializer(() => inject(FuseMediaWatcherService)),
         provideEnvironmentInitializer(() => inject(FusePlatformService)),

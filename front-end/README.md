@@ -1,10 +1,19 @@
+# Angular CLI - Installation
+
+Open a command line and run this:
+
+> npm install -g @angular/cli
+
+This installs Angular CLI runtime in local machine in order to run this client side project.
+
+
 # Fuse - Admin template and Starter project for Angular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli)
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `npm run init-project` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

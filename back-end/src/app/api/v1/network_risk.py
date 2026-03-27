@@ -11,7 +11,7 @@ router = APIRouter()
 model = SupervisedTransductiveModel.load_model()
 service = TransductiveScoringService(model)
 
-@router.post("/network/risk", response_model=NetworkRiskResponse)
+@router.post("/transductive/network/risk", response_model=NetworkRiskResponse)
 def detect_network_risk(request: NetworkRiskRequest):
     """
         Evaluate risk propagation across the graph.
@@ -19,7 +19,7 @@ def detect_network_risk(request: NetworkRiskRequest):
         Use Case: A transaction with moderate probability may still be risky if it is connected to multiple illicit nodes
 
     """
-    score = service.score_network_risk(
+    score = service.get_score_network_risk(
         transaction_id=request.transaction_id,
         hop_depth=request.hop_depth
     )

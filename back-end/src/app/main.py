@@ -44,7 +44,7 @@ app.add_middleware(
 )
 
 # Root Route
-@app.get("/")
+@app.get("/api")
 @limiter.limit("5/minute")
 async def root(
     request: Request,
@@ -52,7 +52,7 @@ async def root(
     return {"message": f"Welcome to {settings.APP_NAME}"}
 
 # Health check Route
-@app.get("/health")
+@app.get("/api/health")
 async def health_check():
     return {"status": "online"}
 
