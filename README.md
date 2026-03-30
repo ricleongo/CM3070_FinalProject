@@ -53,6 +53,7 @@
   - [About the Project](#about-the-project)
     - [Screenshots](#screenshots)
     - [Tech Stack](#tech-stack)
+  - [Data Analytics](#data-analytics)
   - [Contributing](#contributing)
     - [Code of Conduct](#code-of-conduct)
   - [FAQ](#faq)
@@ -109,6 +110,13 @@ My project combines the security of Blockchain with advanced Machine Learning (M
     <li><a href="https://www.mongodb.com/">MongoDB</a></li>
   </ul>
 </details>
+
+
+<!-- Data Analytics -->
+## Data Analytics
+
+Prior to this project, I developed two MD-GCN models: an inductive model to classify new transactions and a transductive model for validation and identifying continuous connections. You can view this part of the analysis via this link: [Jupyter Notebook Data Analysis](https://github.com/ricleongo/CM3070_FinalProject/blob/main/analysis/Multi_Distance_Analysis.ipynb)
+
 
 <!-- Contributing -->
 ## Contributing
