@@ -74,11 +74,17 @@ My project combines the security of Blockchain with advanced Machine Learning (M
   <img src="front_end/assets/Dashboard-1.png" alt="screenshot" />
 </div>
 
+<div align="center"> 
+  <img src="front_end/assets/Dashboard-2.png" alt="screenshot" />
+</div>
+
+<div align="center"> 
+  <img src="front_end/assets/Simulation-1.png" alt="screenshot" />
+</div>
 
 <!-- TechStack -->
 ### Tech Stack
 
-<details>
   <summary>Client</summary>
   <ul>
     <li><a href="https://angular.dev">Angular v19</a></li>
@@ -86,9 +92,7 @@ My project combines the security of Blockchain with advanced Machine Learning (M
     <li><a href="https://tailwindcss.com/">TailwindCSS</a></li>
     <li><a href="https://angular-material.fusetheme.com/auth/sign-in">FUSE Template</a></li>
   </ul>
-</details>
 
-<details>
   <summary>Server</summary>
   <ul>
     <li><a href="https://fastapi.tiangolo.com">Python FastAPI</a></li>
@@ -100,16 +104,14 @@ My project combines the security of Blockchain with advanced Machine Learning (M
     <li><a href="https://scikit-learn.org/stable/">Scikit Learn</a></li>
     <li><a href="https://networkx.org/en/">NetworkX</a></li>
   </ul>
-</details>
 
-<details>
 <summary>Database</summary>
   <ul>
     <li><a href="https://www.kaggle.com/datasets/ellipticco/elliptic-data-set">Elliptic Dataset</a></li>
     <li><a href="https://registry.opendata.aws/aws-public-blockchain/">AWS Public Blockchain Data</a></li>
     <li><a href="https://www.mongodb.com/">MongoDB</a></li>
   </ul>
-</details>
+
 
 
 <!-- Data Analytics -->
