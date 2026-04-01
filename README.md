@@ -29,7 +29,7 @@
   <a href="https://github.com/ricleongo/CM3070_FinalProject/issues/">
     <img src="https://img.shields.io/github/issues/ricleongo/CM3070_FinalProject" alt="open issues" />
   </a>
-  <a href="https://github.com/ricleongo/CM3070_FinalProject/blob/master/LICENSE">
+  <a href="https://github.com/ricleongo/CM3070_FinalProject/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/ricleongo/CM3070_FinalProject.svg" alt="license" />
   </a>
 </p>
@@ -232,13 +232,13 @@ You can view this part of the analysis via this link: [Jupyter Notebook Data Ana
 
 Contributions are always welcome!
 
-See [**contributing.md**](https://github.com/ricleongo/CM3070_FinalProject/blob/master/CONTRIBUTING.md) for ways to get started.
+See [**contributing.md**](https://github.com/ricleongo/CM3070_FinalProject/blob/main/CONTRIBUTING.md) for ways to get started.
 
 
 <!-- Code of Conduct -->
 ### Code of Conduct
 
-Please read the [Code of Conduct](https://github.com/ricleongo/CM3070_FinalProject/blob/master/CODE_OF_CONDUCT.md)
+Please read the [Code of Conduct](https://github.com/ricleongo/CM3070_FinalProject/blob/main/CODE_OF_CONDUCT.md)
 
 <!-- FAQ -->
 ## FAQ
