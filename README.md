@@ -274,5 +274,5 @@ Project Link: [https://github.com/ricleongo/CM3070_FinalProject](https://github.
 * Kipf, T. N., & Welling, M. (2017). **Semi-supervised classification with graph convolutional networks.** *ICLR*.
 * Pranto, T. H., et al. (2022). **Blockchain and machine learning for fraud detection.**
 * Weber, M., et al. (2019). **Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics**
-* Fuse Angular admin template. [Fuse Angular admin template](https://themeforest.net/item/fuse-angularjs-material-design-admin-template). *ThemeForest*.
-* Kaggle Elliptic Dataset [Elliptic Data Set - EDA, Graphs, Random Forest](https://www.kaggle.com/discussions/general/32747).
+* Fuse Angular admin template. [Fuse Angular admin template](https://themeforest.net/item/fuse-angularjs-material-design-admin-template/12931855?irgwc=1&clickid=&iradid=275988&irpid=2981876&iradtype=ONLINE_TRACKING_LINK&irmptype=mediapartner&mp_value1=&gad_source=1&gad_campaignid=20946799167&gbraid=0AAAAADf3e4Gik4f2cS9XLKGmp0GGTs35h&gclid=CjwKCAjwhLPOBhBiEiwA8_wJHK9bCzOHnCmMURNOgXVTumZ3psk2tPZrLV53cJr-kyllGuRsvudx5xoCiC0QAvD_BwE). *ThemeForest*.
+* Kaggle Elliptic Dataset [Elliptic Data Set - EDA, Graphs, Random Forest](https://www.kaggle.com/code/dngchnhtrn/elliptic-dataset).
