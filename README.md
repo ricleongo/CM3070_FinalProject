@@ -232,7 +232,7 @@ You can view this part of the analysis via this link: [Jupyter Notebook Data Ana
 
 Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
+See [**contributing.md**](https://github.com/ricleongo/CM3070_FinalProject/blob/master/CONTRIBUTING.md) for ways to get started.
 
 
 <!-- Code of Conduct -->
@@ -260,6 +260,7 @@ Distributed under the no License.
 
 <!-- Contact -->
 ## Contact
+LinkedIn: [https://www.linkedin.com/in/ricleongo/](https://www.linkedin.com/in/ricleongo/)
 
 Project Link: [https://github.com/ricleongo/CM3070_FinalProject](https://github.com/ricleongo/CM3070_FinalProject)
 
@@ -272,6 +273,6 @@ Project Link: [https://github.com/ricleongo/CM3070_FinalProject](https://github.
 * Chen, X., et al. (2025). **Multi-distance spatial–temporal graph neural network for anomaly detection.** *Advanced Intelligent Systems*.
 * Kipf, T. N., & Welling, M. (2017). **Semi-supervised classification with graph convolutional networks.** *ICLR*.
 * Pranto, T. H., et al. (2022). **Blockchain and machine learning for fraud detection.**
-* Bacronym. (n.d.). [Fuse Angular admin template](https://themeforest.net). *ThemeForest*.
-* Weber, M., et al. (2019). [Anti-money laundering in Bitcoin](https://kaggle.com). *KDD Workshop*.
-* [Leon Gonzalez], J. (2026). [AML Bitcoin anomaly detection platform](https://github.com) [Source code]. *GitHub*.
+* Weber, M., et al. (2019). **Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics**
+* Fuse Angular admin template. [Fuse Angular admin template](https://themeforest.net/item/fuse-angularjs-material-design-admin-template). *ThemeForest*.
+* Kaggle Elliptic Dataset [Elliptic Data Set - EDA, Graphs, Random Forest](https://www.kaggle.com/discussions/general/32747).
